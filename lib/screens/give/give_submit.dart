@@ -5,6 +5,18 @@ class GiveSubmit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("GiveSubmit");
+    return Scaffold(
+        appBar: AppBar(
+          actions: [Text('등록')],
+        ),
+        body: Column(
+          children: [
+            Container(
+              height: 30,
+              width: 30,
+              child: Icon(Icons.camera),
+            ),
+          ],
+        ));
   }
 }
