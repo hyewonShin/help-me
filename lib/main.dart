@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:help_me/screens/helpme/help_me_screen.dart';
-import 'package:help_me/screens/helpyou/help_you_screen.dart';
+import 'package:help_me/screens/ask/ask_screen.dart';
+import 'package:help_me/screens/give/give_screen.dart';
 import 'package:help_me/screens/mypage/mypage_screen.dart';
 
 void main() {
@@ -32,34 +32,34 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Widget> title = [Text("도와줄게"), Text("도와줘"), Text("마이페이지")];
+  List<String> title = ["재능기부", "재능요청", "마이페이지"];
 
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: IndexedStack(index: _selectedIndex, children: title),
-        centerTitle: true,
-      ),
-      body: IndexedStack(index: _selectedIndex, children: [
-        HelpYouScreen(),
-        HelpMeScreen(),
-        MypageScreen(),
-      ]),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: '도와줄게'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: '도와줘'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_2_outlined), label: '마이페이지'),
-        ],
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-      ),
-    );
+        appBar: AppBar(
+          title: Text(title[_selectedIndex]),
+          centerTitle: true,
+        ),
+        body: IndexedStack(index: _selectedIndex, children: [
+          GiveScreen(),
+          AskScreen(),
+          MypageScreen(),
+        ]),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.list), label: '재능기부'),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: '재능요청'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person_2_outlined), label: '마이페이지'),
+          ],
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+        ));
   }
 }
