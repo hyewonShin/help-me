@@ -5,18 +5,27 @@ class GiveSubmit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Scaffold(
         appBar: AppBar(
           actions: [Text('등록')],
         ),
         body: Column(
           children: [
             Container(
-              height: 30,
-              width: 30,
-              child: Icon(Icons.camera),
+              decoration:
+                  BoxDecoration(border: Border.all(color: Color(0xffCCCCCC))),
+              height: 50,
+              width: 50,
+              child: Icon(Icons.photo_camera),
             ),
+            Column(
+              children: [Text('제목'), TextField()],
+            )
           ],
-        ));
+        ),
+      ),
+    );
   }
 }
