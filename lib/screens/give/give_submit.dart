@@ -79,3 +79,5 @@ class GiveSubmit extends StatelessWidget {
     );
   }
 }
+
+//shared_preferences -핸드폰내부로 저장 할 수 있도록
