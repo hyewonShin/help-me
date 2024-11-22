@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class GiveSubmit extends StatelessWidget {
+class GiveSubmit extends StatefulWidget {
   const GiveSubmit({super.key});
+
+  @override
+  State<GiveSubmit> createState() => _GiveSubmitState();
+}
+
+class _GiveSubmitState extends State<GiveSubmit> {
+  TextEditingController controllTitle =
+      TextEditingController(); //제목 textfield 데이터 받기
+  TextEditingController controllPrice =
+      TextEditingController(); //가격 textfield 데이터 받기
+  TextEditingController controllText =
+      TextEditingController(); //상세내용 textfiled 데이터 받기
   Future<void> getImagePickerData() async {
     final ImagePicker picker = ImagePicker();
     final List<XFile> images = await picker.pickMultiImage();
@@ -33,22 +45,22 @@ class GiveSubmit extends StatelessWidget {
                       border: Border.all(color: Color(0xffCCCCCC))),
                   height: 50,
                   width: 50,
-                  child: Icon(
-                      Icons.photo_camera), ////TODO image_picker 로 기본 앨범에서 받아오기
+                  child: Icon(Icons.photo_camera),
                 ),
               ),
               Expanded(
                 child: ListView(
                   children: [
                     SizedBox(height: 20),
-                    inputInfo('제목', '도와줄 수 있는 내용을 입력해주세요.'),
+                    inputInfo('제목', '도와줄 수 있는 내용을 입력해주세요.', controllTitle),
                     SizedBox(height: 20),
-                    inputInfo('가격', '제공할 재능 이용원의 가격을 적어주세요.'),
+                    inputInfo('가격', '제공할 재능 이용원의 가격을 적어주세요.', controllPrice),
                     SizedBox(height: 20),
-                    inputInfo('상세설명', '제공할 재능의 상세 내용을 적어주세요.'),
+                    inputInfo('상세설명', '제공할 재능의 상세 내용을 적어주세요.', controllText),
                   ],
                 ),
               ),
+              // Text('${controllTitle.text}')
             ],
           ),
         ),
@@ -56,7 +68,7 @@ class GiveSubmit extends StatelessWidget {
     );
   }
 
-  Widget inputInfo(String title, String text) {
+  Widget inputInfo(String title, String text, var control) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -64,9 +76,10 @@ class GiveSubmit extends StatelessWidget {
         Container(
           height: 100,
           child: TextField(
-            expands: true,
-            maxLines: null,
-            minLines: null,
+            controller: control,
+            // expands: true,
+            // maxLines: null,
+            // minLines: null,
             style: TextStyle(fontSize: 10),
             decoration: InputDecoration(
               hintText: '$text',
