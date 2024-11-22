@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:help_me/screens/mypage/mypage_ask_list.dart';
 import 'package:help_me/screens/mypage/mypage_give_list.dart';
-import 'mypage_give_list.dart';
 
 class MypageScreen extends StatelessWidget {
   const MypageScreen({super.key});
@@ -50,10 +50,10 @@ class MypageScreen extends StatelessWidget {
                         const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('요청한 재능',
+                            Text('담은 재능',
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold)),
-                            Text('담은 재능',
+                            Text('요청한 재능',
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold))
                           ],
@@ -106,13 +106,20 @@ class MypageScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                     onTap: () {
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (context) {
-                      //   return MypageGive();
-                      // }));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return MypageGiveList();
+                      }));
                     },
                     child: myPageListContainerUi('내가 담은 재능')),
-                myPageListContainerUi('내가 요청한 재능')
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return MypageAskList();
+                      }));
+                    },
+                    child: myPageListContainerUi('내가 요청한 재능'))
               ],
             ),
           ),
