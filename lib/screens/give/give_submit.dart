@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class GiveSubmit extends StatelessWidget {
   const GiveSubmit({super.key});
+  Future<void> getImagePickerData() async {
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> images = await picker.pickMultiImage();
+    print(images.length);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,19 +17,25 @@ class GiveSubmit extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          actions: [Text('등록')],
+          actions: [Text('등록')], //TODO GESTUREDETECTOR JSON 파일에 등록
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                decoration:
-                    BoxDecoration(border: Border.all(color: Color(0xffCCCCCC))),
-                height: 50,
-                width: 50,
-                child: Icon(Icons.photo_camera),
+              GestureDetector(
+                onTap: () {
+                  getImagePickerData();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xffCCCCCC))),
+                  height: 50,
+                  width: 50,
+                  child: Icon(
+                      Icons.photo_camera), ////TODO image_picker 로 기본 앨범에서 받아오기
+                ),
               ),
               Expanded(
                 child: ListView(
@@ -50,7 +62,7 @@ class GiveSubmit extends StatelessWidget {
       children: [
         Text('$title'),
         Container(
-          height: 50,
+          height: 100,
           child: TextField(
             expands: true,
             maxLines: null,
