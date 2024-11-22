@@ -59,6 +59,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - lib/mock_data/ask.json
+    - lib/mock_data/give.json
+    - lib/mock_data/users.json
+
   fonts:
     - family: Pretendard
       fonts:
