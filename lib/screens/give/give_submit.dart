@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,13 +22,20 @@ class _GiveSubmitState extends State<GiveSubmit> {
       TextEditingController(); //상세내용 textfiled 데이터 받기 controllText.text
   XFile? file;
   Future<void> getImagePickerData() async {
-    ImagePicker().pickImage(source: ImageSource.gallery).then((image) {
-      if (image != null) {
-        setState(() {
-          file = image;
-        });
-      }
-    });
+    final imagePicker = ImagePicker();
+    // Future<XFile?>
+    final XFile? xFile =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+    if (xFile != null) {
+      setState(() {
+        file = xFile;
+      });
+    }
+
+    // url, assetPath,
+
+    // final fileObject = File(xFile!.path);
+    // Image.file(fileObject);
   } //image picker
 
   @override
@@ -50,31 +59,38 @@ class _GiveSubmitState extends State<GiveSubmit> {
             children: [
               GestureDetector(
                 onTap: () {
-                  getImagePickerData(); //TODO image picker 이미지 선택하면 이미지 넣기
+                  getImagePickerData();
                 },
                 child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Color(0xffCCCCCC))),
                   height: 50,
                   width: 50,
-                  child: Icon(Icons.photo_camera),
+                  child: file != null
+                      ? Image.file(File(file!.path))
+                      : Icon(Icons.photo_camera),
                 ),
               ),
               Expanded(
                 child: ListView(
                   children: [
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     inputInfo('제목', '도와줄 수 있는 내용을 입력해주세요.', controllTitle),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     inputNumInfo('가격', '제공할 재능 이용원의 가격을 적어주세요.', controllPrice),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     inputInfo('상세설명', '제공할 재능의 상세 내용을 적어주세요.', controllText),
                   ],
                 ),
               ),
+              //TODO GESTUREDETECTOR JSON 파일에 등록
+              //give screen 데이터 호출 및 상태 등록
+              // 그 상태를 add 하여 변경
               Center(
                   child: Container(
                 width: double.infinity,
+
+                ///TODO WIDGET으로 모듈화
                 child: ElevatedButton(
                   onPressed: () {},
                   child: Text(
@@ -98,6 +114,8 @@ class _GiveSubmitState extends State<GiveSubmit> {
   }
 
   ///제목, 상세설명 textfield
+  //TODO null시 빨간색으로 border 변경 IF IF IF
+  ///TODO WIDGET으로 모듈화
   Widget inputInfo(String title, String text, var control) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,6 +127,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
         SizedBox(height: 5),
         Container(
           // height: 100,
+          ///ENUM으로 진행 혹은 EXTEND로 상속을 받아서 위젯으로
           child: TextField(
             controller: control,
             // expands: true,
@@ -128,6 +147,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
   }
 
   ///가격 textfield
+  ///TODO WIDGET으로 모듈화
   Widget inputNumInfo(String title, String text, var control) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,9 +187,4 @@ class _GiveSubmitState extends State<GiveSubmit> {
 //상태관리 data어떻게 불러 와서 어떻게&어디서(목록위치) 관리할지? 문의→ 신혜원님
 // 등록하기에서 json 바로 수정하면 홈페이지 동기화 반영이 안됨.(새로고침, 데이터 동기화 되게 구조를 짜거나?)
 
-//give screen 데이터 호출 및 상태 등록
-// 그 상태를 add 하여 변경
-//
-
-
- //TODO GESTUREDETECTOR JSON 파일에 등록
+//json place holder json 형식들 정리되어있음.
