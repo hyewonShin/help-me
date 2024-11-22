@@ -7,4 +7,5 @@ class AppColors {
   static const Color lightGray = Color(0xFFD9D9D9);
   static const Color darkGreen = Color(0xFF17B36F);
   static const Color lightGreen = Color(0xFF44D596);
+  static const Color onError = Color(0xFFFD7563);
 }
