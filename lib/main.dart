@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:help_me/screens/ask/ask_screen.dart';
 import 'package:help_me/screens/give/give_screen.dart';
+import 'package:help_me/screens/give/give_submit.dart';
 import 'package:help_me/screens/mypage/mypage_screen.dart';
 
 void main() {
