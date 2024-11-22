@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
 class GiveSubmit extends StatefulWidget {
   const GiveSubmit({super.key});
@@ -19,7 +21,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
     final ImagePicker picker = ImagePicker();
     final List<XFile> images = await picker.pickMultiImage();
     print(images.length);
-  }
+  } //image picker
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
             children: [
               GestureDetector(
                 onTap: () {
-                  getImagePickerData();
+                  getImagePickerData(); //image picker
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -54,13 +56,12 @@ class _GiveSubmitState extends State<GiveSubmit> {
                     SizedBox(height: 20),
                     inputInfo('제목', '도와줄 수 있는 내용을 입력해주세요.', controllTitle),
                     SizedBox(height: 20),
-                    inputInfo('가격', '제공할 재능 이용원의 가격을 적어주세요.', controllPrice),
+                    inputNumInfo('가격', '제공할 재능 이용원의 가격을 적어주세요.', controllPrice),
                     SizedBox(height: 20),
                     inputInfo('상세설명', '제공할 재능의 상세 내용을 적어주세요.', controllText),
                   ],
                 ),
               ),
-              // Text('${controllTitle.text}')
             ],
           ),
         ),
@@ -68,13 +69,15 @@ class _GiveSubmitState extends State<GiveSubmit> {
     );
   }
 
+  ///제목, 상세설명 textfield
   Widget inputInfo(String title, String text, var control) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('$title'),
+        SizedBox(height: 5),
         Container(
-          height: 100,
+          // height: 100,
           child: TextField(
             controller: control,
             // expands: true,
@@ -83,7 +86,35 @@ class _GiveSubmitState extends State<GiveSubmit> {
             style: TextStyle(fontSize: 10),
             decoration: InputDecoration(
               hintText: '$text',
+              border: OutlineInputBorder(), //외곽선
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
+  ///가격 textfield
+  Widget inputNumInfo(String title, String text, var control) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('$title'),
+        SizedBox(height: 5),
+        Container(
+          // height: 100,
+          child: TextField(
+            controller: control,
+            keyboardType: TextInputType.numberWithOptions(), //숫자용 키패드
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly
+            ], // 숫자만 입력가능
+            // expands: true,
+            // maxLines: null,
+            // minLines: null,
+            style: TextStyle(fontSize: 10),
+            decoration: InputDecoration(
+              hintText: '$text',
               border: OutlineInputBorder(), //외곽선
             ),
           ),
