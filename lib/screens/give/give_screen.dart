@@ -15,8 +15,15 @@ class GiveScreen extends StatefulWidget {
 class _GiveScreenState extends State<GiveScreen> {
   final giveJsonUrl = "lib/mock_data/give.json";
   final userJsonUrl = "lib/mock_data/users.json";
-  List<dynamic> _data = [];
+  List<dynamic> _giveData = [];
   List<dynamic> _sellerData = [];
+
+  final USER_ID = 1; //현재 로그인한 사용자의 user_id 임의로 지정해둠
+
+  String? image;
+  String? title;
+  String? desc;
+  int? price;
 
   @override
   void initState() {
@@ -29,7 +36,7 @@ class _GiveScreenState extends State<GiveScreen> {
       final String response = await rootBundle.loadString(url);
       final data = json.decode(response);
       setState(() {
-        _data = data;
+        _giveData = data;
       });
     } catch (e) {
       print('error: $e');
@@ -47,10 +54,29 @@ class _GiveScreenState extends State<GiveScreen> {
       setState(() {
         _sellerData = filterData;
       });
-      print(_sellerData);
     } catch (e) {
       print('error: $e');
     }
+  }
+
+  void submitGiveData({
+    image,
+    title,
+    price,
+    desc,
+  }) {
+    int lastGiveId = _giveData.last['give_id'];
+    setState(() {
+      _giveData.add({
+        "give_id": lastGiveId += 1, // 재능기부 포스트 고유번호: 추가 시 마다 +1
+        "user_id": USER_ID, // 우선 임의로 고정값 넣어줌
+        // 진용님 => GiveSubmit에서 해당 함수 사용시 파라미터에 아래 4가지 값만 담아주시면 됩니다
+        "image": image,
+        "title": title,
+        "price": price,
+        "desc": desc,
+      });
+    });
   }
 
   @override
@@ -77,9 +103,9 @@ class _GiveScreenState extends State<GiveScreen> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: _data.length,
+                  itemCount: _giveData.length,
                   itemBuilder: (context, index) {
-                    final item = _data[index];
+                    final item = _giveData[index];
                     return Column(
                       children: [
                         GestureDetector(
@@ -131,6 +157,11 @@ class _GiveScreenState extends State<GiveScreen> {
                                         style: TextStyle(
                                             color: AppColors.darkGray),
                                       ),
+                                      Text(
+                                        item['give_id'].toString(), // test용
+                                        style: TextStyle(
+                                            color: AppColors.darkGray),
+                                      ),
                                       Text("1회 ${item['price']}원",
                                           style: TextStyle(
                                               color: AppColors.darkGreen,
@@ -143,8 +174,8 @@ class _GiveScreenState extends State<GiveScreen> {
                           ),
                         ),
                         Container(
-                          height: 1.0, // 구분선 두께
-                          color: AppColors.lightGray, // 구분선 색상
+                          height: 1.0,
+                          color: AppColors.lightGray,
                         ),
                       ],
                     );
@@ -161,6 +192,7 @@ class _GiveScreenState extends State<GiveScreen> {
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return GiveSubmit();
+                // return GiveSubmit(submitGiveData: submitGiveData);  // 진용님 => give_submit에서 submitGiveData() 테스트시 사용하시면 됩니다
               }));
             },
             foregroundColor: AppColors.white,
