@@ -1,69 +1,47 @@
 [
   {
     "user_id": 0,
-    "name": "재능이",
-    "give": [],
-    "ask": []
+    "name": "재능이"
   },
   {
     "user_id": 1,
-    "name": "솜사탕구름",
-    "give": [],
-    "ask": []
+    "name": "솜사탕구름"
   },
   {
     "user_id": 2,
-    "name": "별똥별냥냥",
-    "give": [],
-    "ask": []
+    "name": "별똥별냥냥"
   },
   {
     "user_id": 3,
-    "name": "햄스터빵빵",
-    "give": [],
-    "ask": []
+    "name": "햄스터빵빵"
   },
   {
     "user_id": 4,
-    "name": "몽글몽글젤리",
-    "give": [],
-    "ask": []
+    "name": "몽글몽글젤리"
   },
   {
     "user_id": 5,
-    "name": "꼬물꼬물두더지",
-    "give": [],
-    "ask": []
+    "name": "꼬물꼬물두더지"
   },
 
   {
     "user_id": 6,
-    "name": "춤추는나비",
-    "give": [],
-    "ask": []
+    "name": "춤추는나비"
   },
   {
     "user_id": 7,
-    "name": "노래하는새",
-    "give": [],
-    "ask": []
+    "name": "노래하는새"
   },
   {
     "user_id": 8,
-    "name": "햇살가득한미소",
-    "give": [],
-    "ask": []
+    "name": "햇살가득한미소"
   },
   {
     "user_id": 9,
-    "name": "랄랄라행복",
-    "give": [],
-    "ask": []
+    "name": "랄랄라행복"
   },
   {
     "user_id": 10,
-    "name": "신나는모험",
-    "give": [],
-    "ask": []
+    "name": "신나는모험"
   }
 ]
