@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:help_me/constant/colors.dart';
+import 'package:help_me/screens/give/give_detail.dart';
 import 'package:help_me/screens/give/give_submit.dart';
 
 class GiveScreen extends StatefulWidget {
@@ -12,8 +13,10 @@ class GiveScreen extends StatefulWidget {
 }
 
 class _GiveScreenState extends State<GiveScreen> {
-  String giveJsonUrl = "lib/mock_data/give.json";
+  final giveJsonUrl = "lib/mock_data/give.json";
+  final userJsonUrl = "lib/mock_data/users.json";
   List<dynamic> _data = [];
+  List<dynamic> _sellerData = [];
 
   @override
   void initState() {
@@ -28,6 +31,23 @@ class _GiveScreenState extends State<GiveScreen> {
       setState(() {
         _data = data;
       });
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  Future<void> _loadAndFindSellerData(url, sellerId) async {
+    try {
+      final String response = await rootBundle.loadString(url);
+      final data = json.decode(response);
+
+      final filterData =
+          data.where((item) => item['user_id'] == sellerId).toList();
+
+      setState(() {
+        _sellerData = filterData;
+      });
+      print(_sellerData);
     } catch (e) {
       print('error: $e');
     }
@@ -62,41 +82,63 @@ class _GiveScreenState extends State<GiveScreen> {
                     final item = _data[index];
                     return Column(
                       children: [
-                        ListTile(
-                          title: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  child: Image.network(item['image'],
-                                      width: 111,
-                                      height: 113,
-                                      fit: BoxFit.cover),
-                                ),
-                                SizedBox(
-                                  width: 13,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      item['title'],
-                                      style: TextStyle(color: AppColors.black),
-                                    ),
-                                    Text(
-                                      "사용자",
-                                      style:
-                                          TextStyle(color: AppColors.darkGray),
-                                    ),
-                                    Text("1회 ${item['price']}원",
+                        GestureDetector(
+                          onTap: () {
+                            _loadAndFindSellerData(
+                                userJsonUrl, item['user_id']);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) {
+                                return GiveDetail(
+                                  image: item['image'],
+                                  sellerId: item['user_id'],
+                                  title: item['title'],
+                                  desc: item['desc'],
+                                  price: item['price'],
+                                  sellerGive: _sellerData[0]['give'].length,
+                                  sellerAsk: _sellerData[0]['ask'].length,
+                                );
+                              }),
+                            );
+                          },
+                          child: ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: Image.network(item['image'],
+                                        width: 111,
+                                        height: 113,
+                                        fit: BoxFit.cover),
+                                  ),
+                                  SizedBox(
+                                    width: 13,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item['title'],
+                                        style:
+                                            TextStyle(color: AppColors.black),
+                                      ),
+                                      Text(
+                                        "사용자",
                                         style: TextStyle(
-                                            color: AppColors.lightGreen,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                              ],
+                                            color: AppColors.darkGray),
+                                      ),
+                                      Text("1회 ${item['price']}원",
+                                          style: TextStyle(
+                                              color: AppColors.darkGreen,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
