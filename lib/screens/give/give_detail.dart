@@ -8,6 +8,8 @@ class GiveDetail extends StatelessWidget {
   final String? title;
   final String? desc;
   final int? price;
+  final int? giveId;
+  final Function cartGiveData;
 
   const GiveDetail(
       {super.key,
@@ -17,7 +19,9 @@ class GiveDetail extends StatelessWidget {
       this.price,
       this.sellerId,
       this.sellerGive,
-      this.sellerAsk});
+      this.sellerAsk,
+      this.giveId,
+      required this.cartGiveData});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,11 @@ class GiveDetail extends StatelessWidget {
           Text('$desc'),
           Text('이용권 갯수'),
           Text('${price.toString()}'),
+          GestureDetector(
+              onTap: () {
+                cartGiveData(giveId);
+              },
+              child: Icon(Icons.home))
         ],
       ),
     );

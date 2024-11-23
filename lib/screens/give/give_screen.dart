@@ -17,6 +17,7 @@ class _GiveScreenState extends State<GiveScreen> {
   final userJsonUrl = "lib/mock_data/users.json";
   List<dynamic> _giveData = [];
   List<dynamic> _sellerData = [];
+  List<dynamic> userGiveList = []; // 내가 담은 재능 리스트
 
   final USER_ID = 1; //현재 로그인한 사용자의 user_id 임의로 지정해둠
 
@@ -79,6 +80,20 @@ class _GiveScreenState extends State<GiveScreen> {
     });
   }
 
+  void cartGiveData(giveId) async {
+    final String response = await rootBundle.loadString(userJsonUrl);
+    final data = json.decode(response);
+
+    final user = data.where((item) => item['user_id'] == USER_ID).toList();
+
+    List giveList = user[0]['give'];
+
+    setState(() {
+      userGiveList = {...userGiveList, ...giveList, giveId}.toList();
+    });
+    print('userGiveList > $userGiveList');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,14 +131,15 @@ class _GiveScreenState extends State<GiveScreen> {
                               context,
                               MaterialPageRoute(builder: (context) {
                                 return GiveDetail(
-                                  image: item['image'],
-                                  sellerId: item['user_id'],
-                                  title: item['title'],
-                                  desc: item['desc'],
-                                  price: item['price'],
-                                  sellerGive: _sellerData[0]['give'].length,
-                                  sellerAsk: _sellerData[0]['ask'].length,
-                                );
+                                    image: item['image'],
+                                    sellerId: item['user_id'],
+                                    title: item['title'],
+                                    desc: item['desc'],
+                                    price: item['price'],
+                                    sellerGive: _sellerData[0]['give'].length,
+                                    sellerAsk: _sellerData[0]['ask'].length,
+                                    giveId: item['give_id'],
+                                    cartGiveData: cartGiveData);
                               }),
                             );
                           },
