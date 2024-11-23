@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 
-class InputInfo extends StatelessWidget {
+class InputInfo extends StatefulWidget {
   String? textInputType; // 입력 및 키보드 타입 null=문자, !null=숫자
   String title; //제목 ex. title: "제목을 입력해주세요."
   String hinttext; //힌트 택스트 문자 ex. hinttext: "힌트를 입력해주세요."
@@ -11,13 +11,19 @@ class InputInfo extends StatelessWidget {
 
   InputInfo(this.textInputType,
       {required this.title, required this.hinttext, this.control});
+
+  @override
+  State<InputInfo> createState() => _InputInfoState();
+}
+
+class _InputInfoState extends State<InputInfo> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '$title',
+          '${widget.title}',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 5),
@@ -25,11 +31,11 @@ class InputInfo extends StatelessWidget {
           // height: 100,
           ///ENUM으로 진행 혹은 EXTEND로 상속을 받아서 위젯으로
           child: TextField(
-            controller: control,
-            keyboardType: textInputType == null
+            controller: widget.control,
+            keyboardType: widget.textInputType == null
                 ? null
                 : TextInputType.numberWithOptions(), //숫자용 키패드
-            inputFormatters: textInputType == null
+            inputFormatters: widget.textInputType == null
                 ? null
                 : [
                     CurrencyTextInputFormatter.currency(
@@ -44,11 +50,18 @@ class InputInfo extends StatelessWidget {
             // minLines: null,
             style: TextStyle(fontSize: 16),
             decoration: InputDecoration(
-              hintText: ('$hinttext'),
+              hintText: ('${widget.hinttext}'),
               hintStyle: TextStyle(
                   color: AppColors.lightGray, fontWeight: FontWeight.bold),
-              border: OutlineInputBorder(), //외곽선
+              border: OutlineInputBorder(
+                  borderSide: BorderSide()), //color: Color borderColor//외곽선
             ),
+            onChanged: (value) {
+              setState(() {
+                Color borderColor =
+                    value.isNotEmpty ? AppColors.black : Color(0xFFFD7563);
+              });
+            },
           ),
         ),
       ],
