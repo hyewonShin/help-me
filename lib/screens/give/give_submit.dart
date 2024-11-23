@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
+import 'package:help_me/widget/textfiled.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -53,7 +54,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -64,8 +65,8 @@ class _GiveSubmitState extends State<GiveSubmit> {
                 child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Color(0xffCCCCCC))),
-                  height: 50,
-                  width: 50,
+                  height: 60,
+                  width: 60,
                   child: file != null
                       ? Image.file(File(file!.path))
                       : Icon(Icons.photo_camera),
@@ -75,11 +76,20 @@ class _GiveSubmitState extends State<GiveSubmit> {
                 child: ListView(
                   children: [
                     const SizedBox(height: 20),
-                    inputInfo('제목', '도와줄 수 있는 내용을 입력해주세요.', controllTitle),
+                    InputInfo(null,
+                        title: '제목',
+                        hinttext: '도와줄 수 있는 내용을 입력해주세요.',
+                        control: controllTitle),
                     const SizedBox(height: 20),
-                    inputNumInfo('가격', '제공할 재능 이용원의 가격을 적어주세요.', controllPrice),
+                    InputInfo('',
+                        title: '가격',
+                        hinttext: '제공할 재능 이용원의 가격을 적어주세요.',
+                        control: controllPrice),
                     const SizedBox(height: 20),
-                    inputInfo('상세설명', '제공할 재능의 상세 내용을 적어주세요.', controllText),
+                    InputInfo(null,
+                        title: '상세설명',
+                        hinttext: '제공할 재능의 상세 내용을 적어주세요',
+                        control: controllPrice),
                   ],
                 ),
               ),
@@ -116,7 +126,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
   ///제목, 상세설명 textfield
   //TODO null시 빨간색으로 border 변경 IF IF IF
   ///TODO WIDGET으로 모듈화
-  Widget inputInfo(String title, String text, var control) {
+  Widget inputInfo(String title, String details, var control) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -133,9 +143,9 @@ class _GiveSubmitState extends State<GiveSubmit> {
             // expands: true,
             // maxLines: null,
             // minLines: null,
-            style: TextStyle(fontSize: 13),
+            style: TextStyle(fontSize: 16),
             decoration: InputDecoration(
-              hintText: ('$text'),
+              hintText: ('$details'),
               hintStyle: TextStyle(
                   color: AppColors.lightGray, fontWeight: FontWeight.bold),
               border: OutlineInputBorder(), //외곽선
@@ -148,7 +158,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
 
   ///가격 textfield
   ///TODO WIDGET으로 모듈화
-  Widget inputNumInfo(String title, String text, var control) {
+  Widget inputNumInfo(String title, String details, var control) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -168,9 +178,9 @@ class _GiveSubmitState extends State<GiveSubmit> {
             // expands: true,
             // maxLines: null,
             // minLines: null,
-            style: TextStyle(fontSize: 13),
+            style: TextStyle(fontSize: 16),
             decoration: InputDecoration(
-              hintText: '$text',
+              hintText: '$details',
               hintStyle: TextStyle(
                   color: AppColors.lightGray, fontWeight: FontWeight.bold),
               border: OutlineInputBorder(), //외곽선
