@@ -1,8 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:help_me/screens/mypage/dataReader.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
-class MypageGiveList extends StatelessWidget {
+class MypageGiveList extends StatefulWidget {
   const MypageGiveList({super.key});
+
+  @override
+  State<MypageGiveList> createState() => _MypageGiveListState();
+}
+
+class _MypageGiveListState extends State<MypageGiveList> {
+  List<Give> giveList = []; // 데이터를 저장할 리스트
+  bool isLoading = true; // 로딩 상태를 관리
+
+  void initState() {
+    super.initState();
+    loadData(); // 데이터 로드
+  }
+
+  // JSON 데이터를 로드하고 파싱하는 함수
+  Future<void> loadData() async {
+    try {
+      // JSON 파일 읽기
+      final String responseGive =
+          await rootBundle.loadString('lib/mock_data/give.json');
+      final List<dynamic> dataGive = jsonDecode(responseGive);
+
+      final String responseAsk =
+          await rootBundle.loadString('lib/mock_data/ask.json');
+      final List<dynamic> dataAsk = jsonDecode(responseAsk);
+
+      final String responseUsers =
+          await rootBundle.loadString('lib/mock_data/users.json');
+      final List<dynamic> dataUsers = jsonDecode(responseUsers);
+
+      // 데이터를 Give 객체 리스트로 변환
+      setState(() {
+        giveList = dataGive.map((json) => Give.fromJson(json)).toList();
+        isLoading = false; // 로딩 완료
+      });
+    } catch (e) {
+      // 에러 처리
+      setState(() {
+        isLoading = false;
+      });
+      print('JSON 로드 에러: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,10 +55,10 @@ class MypageGiveList extends StatelessWidget {
           title: const Text(
             '내가 담은 재능',
             style: TextStyle(
-                color: Color(0xFF222222),
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                height: 0.06),
+              color: Color(0xFF222222),
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           centerTitle: true,
         ),
@@ -27,7 +71,7 @@ class MypageGiveList extends StatelessWidget {
               color: Colors.white,
             ),
             child: ListView.builder(
-                itemCount: 20, //data 길이만큼으로 수정할 것
+                itemCount: giveList.length, //data 길이만큼으로 수정할 것
                 itemBuilder: (BuildContext context, int index) {
                   return buildContainerList(index);
                 }),
@@ -36,6 +80,7 @@ class MypageGiveList extends StatelessWidget {
   }
 
   Container buildContainerList(int index) {
+    final Give give = giveList[index];
     return Container(
       height: 153,
       width: double.infinity,
@@ -66,7 +111,7 @@ class MypageGiveList extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '수영가르쳐드립니다.',
+                          '${give.title}',
                           style: TextStyle(
                             color: Color(0xFF222222),
                             fontSize: 16,
@@ -87,7 +132,7 @@ class MypageGiveList extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '1회 20,000원',
+                      '1회 ${give.price}원',
                       style: TextStyle(
                         color: Color(0xFF17B36F),
                         fontSize: 16,
@@ -137,6 +182,37 @@ class MypageGiveList extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+}
+
+// Give 데이터 모델 클래스
+class Give {
+  final int giveId;
+  final int userId;
+  final String title;
+  final String desc;
+  final int price;
+  final String image;
+
+  Give({
+    required this.giveId,
+    required this.userId,
+    required this.title,
+    required this.desc,
+    required this.price,
+    required this.image,
+  });
+
+  // JSON 데이터를 Dart 객체로 변환
+  factory Give.fromJson(Map<String, dynamic> json) {
+    return Give(
+      giveId: json['give_id'],
+      userId: json['user_id'],
+      title: json['title'],
+      desc: json['desc'],
+      price: json['price'],
+      image: json['image'],
     );
   }
 }
