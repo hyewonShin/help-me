@@ -10,12 +10,12 @@ class MypageGiveList extends StatefulWidget {
 }
 
 class _MypageGiveListState extends State<MypageGiveList> {
-  bool isLoading = true; // 로딩 상태를 관리
   List<GiveCartList> giveList = []; // 데이터를 저장할 리스트
   List<Users> usersList = [];
   DataService dataService = DataService();
-  int userLoginId = 0; // 로그인한 사용자 ID
+  int userLoginId = 1; // 로그인한 사용자 ID
 
+  @override
   void initState() {
     super.initState();
     loadData(); // 데이터 로드
@@ -31,12 +31,8 @@ class _MypageGiveListState extends State<MypageGiveList> {
       setState(() {
         giveList = giveCartData;
         usersList = users;
-        isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
       print('데이터 로드 에러: $e');
     }
   }
@@ -60,11 +56,11 @@ class _MypageGiveListState extends State<MypageGiveList> {
           padding: const EdgeInsets.all(20),
           child: Container(
             height: 650,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
             ),
             child: ListView.builder(
-                itemCount: giveList.length, //data 길이만큼으로 수정할 것
+                itemCount: giveList.length, //data 길이만큼 리스트 뷰 생성
                 itemBuilder: (BuildContext context, int index) {
                   return buildContainerList(index);
                 }),
@@ -73,6 +69,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
   }
 
   Container buildContainerList(int index) {
+    //index를 파라미터로 받아 Container를 생성하는 함수
     GiveCartList give = giveList[index];
     String imgUrl = give.image;
     return Container(
@@ -107,22 +104,21 @@ class _MypageGiveListState extends State<MypageGiveList> {
                       children: [
                         Text(
                           '${give.title}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Color(0xFF222222),
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Spacer(),
-                        Icon(Icons.close),
+                        const Spacer(),
+                        const Icon(Icons.close), //delete 기능 넣을것#####
                       ],
                     ),
                     Text(
                       '${give.username}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color(0xFF9E9E9E),
                         fontSize: 14,
-                        fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -137,7 +133,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                     const SizedBox(
                       height: 16,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
@@ -146,14 +142,16 @@ class _MypageGiveListState extends State<MypageGiveList> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Icon(
-                                Icons.indeterminate_check_box,
+                                Icons
+                                    .indeterminate_check_box, //+- 기능 넣기 ###########
                                 color: Color(0xFFD9D9D9),
                               ),
                               Text('2',
                                   style: TextStyle(
                                       color: Color(0xFF44D596),
                                       fontSize: 20,
-                                      fontWeight: FontWeight.bold)), //수량넣기
+                                      fontWeight:
+                                          FontWeight.bold)), //수량넣기############
                               Icon(
                                 Icons.add_box,
                                 color: Color(0xFFD9D9D9),
@@ -161,7 +159,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                             ],
                           ),
                         ),
-                        Text('40,000원',
+                        Text('40,000원', //금액 변경 함수 넣기 #########
                             style: TextStyle(
                               color: Color(0xFF222222),
                               fontSize: 20,

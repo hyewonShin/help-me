@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'models.dart';
 
 class DataService {
+  //json 파일 로드하여 models의 class로 변환
   Future<List<Give>> loadGives() async {
     final String responseGive =
         await rootBundle.loadString('lib/mock_data/give.json');
@@ -49,6 +50,7 @@ class DataService {
     final user = usersList.firstWhere(
       (u) => u.userId == userId,
       orElse: () => Users(
+        //못찾았을시 반환 값
         userId: 0,
         name: 'Unknown',
         giveCart: [],

@@ -1,5 +1,3 @@
-// lib/screens/mypage/models.dart
-
 class Give {
   final int giveId;
   final int userId;
