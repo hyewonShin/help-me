@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
+import 'data_service.dart';
+import 'models.dart';
 
 class MypageGiveList extends StatefulWidget {
   const MypageGiveList({super.key});
@@ -10,41 +10,34 @@ class MypageGiveList extends StatefulWidget {
 }
 
 class _MypageGiveListState extends State<MypageGiveList> {
-  List<Give> giveList = []; // 데이터를 저장할 리스트
   bool isLoading = true; // 로딩 상태를 관리
+  List<GiveCartList> giveList = []; // 데이터를 저장할 리스트
+  List<Users> usersList = [];
+  DataService dataService = DataService();
+  int userLoginId = 0; // 로그인한 사용자 ID
 
   void initState() {
     super.initState();
     loadData(); // 데이터 로드
   }
 
-  // JSON 데이터를 로드하고 파싱하는 함수
   Future<void> loadData() async {
     try {
-      // JSON 파일 읽기
-      final String responseGive =
-          await rootBundle.loadString('lib/mock_data/give.json');
-      final List<dynamic> dataGive = jsonDecode(responseGive);
+      final gives = await dataService.loadGives();
+      final users = await dataService.loadUsers();
+      final giveCartData =
+          await dataService.createGiveCartList(gives, users, userLoginId);
 
-      final String responseAsk =
-          await rootBundle.loadString('lib/mock_data/ask.json');
-      final List<dynamic> dataAsk = jsonDecode(responseAsk);
-
-      final String responseUsers =
-          await rootBundle.loadString('lib/mock_data/users.json');
-      final List<dynamic> dataUsers = jsonDecode(responseUsers);
-
-      // 데이터를 Give 객체 리스트로 변환
       setState(() {
-        giveList = dataGive.map((json) => Give.fromJson(json)).toList();
-        isLoading = false; // 로딩 완료
+        giveList = giveCartData;
+        usersList = users;
+        isLoading = false;
       });
     } catch (e) {
-      // 에러 처리
       setState(() {
         isLoading = false;
       });
-      print('JSON 로드 에러: $e');
+      print('데이터 로드 에러: $e');
     }
   }
 
@@ -80,7 +73,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
   }
 
   Container buildContainerList(int index) {
-    final Give give = giveList[index];
+    final GiveCartList give = giveList[index];
     return Container(
       height: 153,
       width: double.infinity,
@@ -182,37 +175,6 @@ class _MypageGiveListState extends State<MypageGiveList> {
           )
         ],
       ),
-    );
-  }
-}
-
-// Give 데이터 모델 클래스
-class Give {
-  final int giveId;
-  final int userId;
-  final String title;
-  final String desc;
-  final int price;
-  final String image;
-
-  Give({
-    required this.giveId,
-    required this.userId,
-    required this.title,
-    required this.desc,
-    required this.price,
-    required this.image,
-  });
-
-  // JSON 데이터를 Dart 객체로 변환
-  factory Give.fromJson(Map<String, dynamic> json) {
-    return Give(
-      giveId: json['give_id'],
-      userId: json['user_id'],
-      title: json['title'],
-      desc: json['desc'],
-      price: json['price'],
-      image: json['image'],
     );
   }
 }
