@@ -73,7 +73,8 @@ class _MypageGiveListState extends State<MypageGiveList> {
   }
 
   Container buildContainerList(int index) {
-    final GiveCartList give = giveList[index];
+    GiveCartList give = giveList[index];
+    String imgUrl = give.image;
     return Container(
       height: 153,
       width: double.infinity,
@@ -90,7 +91,8 @@ class _MypageGiveListState extends State<MypageGiveList> {
           Container(
             width: 111,
             height: 113,
-            decoration: BoxDecoration(color: Colors.amber),
+            decoration: BoxDecoration(
+                image: DecorationImage(image: NetworkImage(imgUrl))),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -116,7 +118,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                       ],
                     ),
                     Text(
-                      '김대성',
+                      '${give.username}',
                       style: TextStyle(
                         color: Color(0xFF9E9E9E),
                         fontSize: 14,
@@ -126,14 +128,13 @@ class _MypageGiveListState extends State<MypageGiveList> {
                     ),
                     Text(
                       '1회 ${give.price}원',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color(0xFF17B36F),
                         fontSize: 16,
-                        fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     Row(
