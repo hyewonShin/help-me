@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:help_me/screens/ask/ask_detail.dart';
 import 'package:help_me/screens/ask/ask_submit.dart';
 
 String wonCurrency(int price) {
@@ -20,28 +21,40 @@ class AskScreen extends StatefulWidget {
 
 class _AskScreenState extends State<AskScreen> {
   String askJsonUrl = "lib/mock_data/ask.json";
+  String usersJsonUrl = "lib/mock_data/users.json";
   List<dynamic> _askData = [];
-
-  String? title;
-  String? user_id; //TODO: 사용자 이름으로 변경해야 할 것 같습니다.
-  int? price;
+  List<dynamic> _usersData = [];
 
   @override
   void initState() {
     super.initState();
-    _loadData(askJsonUrl);
+    _loadData(askJsonUrl, isAskData: true);
+    _loadData(usersJsonUrl, isAskData: false);
   }
 
-  Future<void> _loadData(url) async {
+  Future<void> _loadData(String url, {required bool isAskData}) async {
     try {
       final String response = await rootBundle.loadString(url);
       final data = json.decode(response);
       setState(() {
-        _askData = data;
+        if (isAskData) {
+          _askData = data;
+        } else {
+          _usersData = data;
+        }
       });
     } catch (e) {
       print('error: $e');
     }
+  }
+
+  // user_id로 이름을 가져오는 함수
+  String? getUserName(int userId) {
+    final user = _usersData.firstWhere(
+      (user) => user['user_id'] == userId,
+      orElse: () => null,
+    );
+    return user?['name'];
   }
 
   @override
@@ -70,38 +83,49 @@ class _AskScreenState extends State<AskScreen> {
                   itemCount: _askData.length,
                   itemBuilder: (context, index) {
                     final item = _askData[index];
-                    return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      width: 362,
-                      height: 110,
-                      decoration: BoxDecoration(
-                          border: index == _askData.length - 1
-                              ? null
-                              : Border(
-                                  bottom: BorderSide(
-                                      color: AppColors.lightGray, width: 1))),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(item['title'],
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.bold)),
-                            SizedBox(height: 2),
-                            Text(item['user_id'].toString(),
-                                style: TextStyle(
-                                    fontSize: 14, color: AppColors.darkGray)),
-                            SizedBox(height: 2),
-                            Text("사례금 ${wonCurrency(item['price'])}",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: AppColors.darkGreen,
-                                    fontWeight: FontWeight.bold))
-                          ],
+                    final userName = getUserName(item['user_id']);
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AskDetail(item: item),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        width: 362,
+                        height: 110,
+                        decoration: BoxDecoration(
+                            border: index == _askData.length - 1
+                                ? null
+                                : Border(
+                                    bottom: BorderSide(
+                                        color: AppColors.lightGray, width: 1))),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(item['title'],
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.black,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(height: 2),
+                              Text(userName ?? '알 수 없는 사용자',
+                                  style: TextStyle(
+                                      fontSize: 14, color: AppColors.darkGray)),
+                              SizedBox(height: 2),
+                              Text("사례금 ${wonCurrency(item['price'])}",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.darkGreen,
+                                      fontWeight: FontWeight.bold))
+                            ],
+                          ),
                         ),
                       ),
                     );
