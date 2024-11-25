@@ -173,11 +173,11 @@ class _GiveScreenState extends State<GiveScreen> {
                                         style: TextStyle(
                                             color: AppColors.darkGray),
                                       ),
-                                      Text(
-                                        item['give_id'].toString(), // test용
-                                        style: TextStyle(
-                                            color: AppColors.darkGray),
-                                      ),
+                                      // Text(
+                                      //   item['give_id'].toString(), // test용
+                                      //   style: TextStyle(
+                                      //       color: AppColors.darkGray),
+                                      // ),
                                       Text("1회 ${item['price']}원",
                                           style: TextStyle(
                                               color: AppColors.darkGreen,
