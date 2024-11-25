@@ -115,7 +115,7 @@ class DataService {
 
   // `increaseQuantity` 함수 추가: userId와 giveId를 받아 quantity를 1 증가시키는 함수
   Future<void> increaseQuantity(
-      List<Users> usersList, int userLoginId, int giveId) async {
+      List<Users> usersList, int userLoginId, int giveId, bool plus) async {
     try {
       // usersList에서 해당 userLoginId를 가진 사용자 찾기
       final user = usersList.firstWhere(
@@ -127,8 +127,15 @@ class DataService {
         (give) => give['give_id'] == giveId,
       );
 
-      // quantity 증가
-      giveItem['quantity'] += 1;
+      if (plus) {
+        // quantity 증가
+        giveItem['quantity'] += 1;
+      } else if (giveItem['quantity'] > 0) {
+        // quantity 감소
+        giveItem['quantity'] -= 1;
+      } else {
+        return;
+      } // quantity 0 이하일 때 do nothing
 
       // 수정된 usersList를 JSON으로 변환
       final updatedJsonString =

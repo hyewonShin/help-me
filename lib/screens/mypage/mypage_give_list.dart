@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'data_service.dart';
 import 'models.dart';
+import 'package:flutter/cupertino.dart';
 
 class MypageGiveList extends StatefulWidget {
   const MypageGiveList({super.key});
@@ -54,16 +55,74 @@ class _MypageGiveListState extends State<MypageGiveList> {
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.all(20),
-          child: Container(
-            height: 650,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
-            child: ListView.builder(
-                itemCount: giveList.length, //data 길이만큼 리스트 뷰 생성
-                itemBuilder: (BuildContext context, int index) {
-                  return buildContainerList(index);
-                }),
+          child: Column(
+            children: [
+              Container(
+                height: 650,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: ListView.builder(
+                    itemCount: giveList.length, //data 길이만큼 리스트 뷰 생성
+                    itemBuilder: (BuildContext context, int index) {
+                      return buildContainerList(index);
+                    }),
+              ),
+              Container(
+                width: 370,
+                height: 42,
+                decoration: ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF44D596),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20))),
+
+                    ///버튼 터치시 호출할 함수
+                    onPressed: () {
+                      showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: Text('모두 구매하시겠습니까?'),
+                              content: Text('금액 : 원'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  isDefaultAction: true,
+                                  onPressed: () {
+                                    //취소 버튼 터치시 알림창 종료
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('취소'),
+                                ),
+                                CupertinoDialogAction(
+                                  isDestructiveAction: true,
+                                  onPressed: () {
+                                    // 스택에서 현재 페이지 포함 3번째 페이지로 이동
+                                    int count = 0;
+                                    Navigator.of(context).popUntil((route) {
+                                      count++;
+                                      return count == 3;
+                                    });
+                                  },
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    child: Text(
+                      '모두 구매 하기',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    )),
+              )
+            ],
           ),
         ));
   }
@@ -86,9 +145,9 @@ class _MypageGiveListState extends State<MypageGiveList> {
       });
     }
 
-    // 수량 증가 함수 (옵션)
-    void increaseQuantity() {
-      dataService.increaseQuantity(usersList, userLoginId, give.giveId);
+    // 수량 증가 감소 함수
+    void increaseQuantity(bool plus) {
+      dataService.increaseQuantity(usersList, userLoginId, give.giveId, plus);
       setState(() {
         giveListQuantity =
             dataService.getGiveQuantity(usersList, userLoginId, give.giveId);
@@ -108,11 +167,10 @@ class _MypageGiveListState extends State<MypageGiveList> {
       )),
       child: Row(
         children: [
-          Container(
-            width: 111,
-            height: 113,
-            decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage(imgUrl))),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: Image.network(imgUrl,
+                width: 111, height: 113, fit: BoxFit.cover),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -165,7 +223,9 @@ class _MypageGiveListState extends State<MypageGiveList> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               GestureDetector(
-                                onTap: decreaseQuantity, // 아이콘 터치 시 감소 함수 호출
+                                onTap: () {
+                                  increaseQuantity(false);
+                                }, // 아이콘 터치 시 감소 함수 호출
                                 child: Icon(
                                   Icons
                                       .indeterminate_check_box, //+- 기능 넣기 ###########
@@ -179,7 +239,9 @@ class _MypageGiveListState extends State<MypageGiveList> {
                                       fontWeight:
                                           FontWeight.bold)), //수량넣기############
                               GestureDetector(
-                                onTap: increaseQuantity, // 아이콘 터치 시 증가 함수 호출
+                                onTap: () {
+                                  increaseQuantity(true);
+                                }, // 아이콘 터치 시 증가 함수 호출
                                 child: Icon(
                                   Icons.add_box,
                                   color: Color(0xFFD9D9D9),
