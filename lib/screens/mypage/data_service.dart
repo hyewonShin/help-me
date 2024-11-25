@@ -99,4 +99,38 @@ class DataService {
 
     return giveCartList;
   }
+
+  /// `askCartList`를 생성하는 함수
+  List<Map> createAskCartList(
+      List<Ask> askList, List<Users> usersList, int userId) {
+    List<Map> askCartList = [];
+    //username 찾기
+    final user = usersList.firstWhere(
+      (u) => u.userId == userId,
+      orElse: () => Users(
+        // 못 찾았을 시 반환 값
+        userId: 0,
+        name: 'Unknown',
+        giveCart: [],
+        askCart: [],
+      ),
+    );
+
+    // 해당 userID의 askList
+    final askListOfUser =
+        List.from(askList.where((ask) => ask.userId == userId));
+
+    List result = [];
+    // 결과를 저장할 리스트
+    for (Ask ask in askListOfUser) {
+      askCartList.add({
+        "username": user.name,
+        "askId": ask.askId,
+        "title": ask.title,
+        "price": ask.price
+      });
+    }
+
+    return askCartList;
+  }
 }
