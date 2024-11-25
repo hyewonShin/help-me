@@ -15,6 +15,7 @@ class _MypageScreenState extends State<MypageScreen> {
   List<Give> giveList = []; // 데이터를 저장할 리스트
   List<Ask> askList = [];
   List<Users> usersList = [];
+  List<GiveCartList> giveCartList = []; // 사용자가 ��은 재능 목록
   bool isLoading = true; // 로딩 상태를 관리(true : 로딩중, false : 로딩 완료)
   int userLoginId = 0; // 로그인한 사용자 ID
   int giveCount = 0; //사용자가 담은 재능 개수
@@ -33,16 +34,16 @@ class _MypageScreenState extends State<MypageScreen> {
       final gives = await dataService.loadGives();
       final asks = await dataService.loadAsks();
       final users = await dataService.loadUsers();
-      print('bbb');
+      final giveCart =
+          await dataService.createGiveCartList(gives, users, userLoginId);
 
       setState(() {
         giveList = gives;
         askList = asks;
         usersList = users;
+        giveCartList = giveCart;
 
-        giveCount = giveList
-            .where((give) => give.userId == userLoginId)
-            .length; // 재능 담기 개수 계산
+        giveCount = giveCart.length; // 재능 담기 개수 계산
         askCount = askList
             .where((ask) => ask.userId == userLoginId)
             .length; // 재능 요청 개수 계산

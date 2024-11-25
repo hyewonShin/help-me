@@ -56,8 +56,8 @@ class Ask {
 class Users {
   final int userId;
   final String name;
-  final List<String> giveCart;
-  final List<String> askCart;
+  final List<Map<String, dynamic>> giveCart;
+  final List<Map<String, dynamic>> askCart;
 
   Users({
     required this.userId,
@@ -79,7 +79,9 @@ class GiveCartList {
   int giveId;
   String username;
   String title;
+  int quantity;
   int price;
   String image;
-  GiveCartList(this.giveId, this.username, this.title, this.price, this.image);
+  GiveCartList(this.giveId, this.username, this.title, this.quantity,
+      this.price, this.image);
 }
