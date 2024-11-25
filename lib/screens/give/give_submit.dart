@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
-import 'package:help_me/widget/textfiled.dart';
+import 'package:help_me/widget/textfield.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -36,12 +36,12 @@ class _GiveSubmitState extends State<GiveSubmit> {
     // url, assetPath,
   } //image picker
 
-  String? isEmpty;
-  void onSelected(String isEmpty) {
-    setState(() {
-      isEmpty = "공란";
-    });
-  }
+  // String? isEmpty;
+  // void onSelected(String isEmpty) {
+  //   setState(() {
+  //     isEmpty = "공란";
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -109,54 +109,54 @@ class _GiveSubmitState extends State<GiveSubmit> {
                 ///TODO WIDGET으로 모듈화
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (controllTitle != null &&
-                        controllPrice != null &&
-                        controllText != null)
-                      //TODO null시 빨간색으로 border 변경 함수 설정 후 setstate로 border color 변경 method지정
-                      // if(controllTitle==null){
-                      //   await
-                      // return;
-                      // }
-                      // if(controllTitle==null){
-                      //   await
-                      // return;
-                      // }
-                      // if(controllTitle==null){
-                      //   await
-                      //return;
-                      // }
-                      await showCupertinoDialog(
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                          title: Container(
-                              width: 100,
-                              height: 100,
-                              child: Image.file(File(file!.path))),
-                          content: Text(
-                              '재능기부 등록하시겠습니까?\n제목: ${controllTitle.text}\n가격: ${controllPrice.text}원'),
-                          actions: [
-                            CupertinoDialogAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                "뒤로가기",
-                                style: TextStyle(color: AppColors.black),
-                              ),
+                    // if (controllTitle != null &&
+                    //     controllPrice != null &&
+                    //     controllText != null)
+                    //TODO null시 빨간색으로 border 변경 함수 설정 후 setstate로 border color 변경 method지정
+                    // if(controllTitle==null){
+                    //   await
+                    // return;
+                    // }
+                    // if(controllTitle==null){
+                    //   await
+                    // return;
+                    // }
+                    // if(controllTitle==null){
+                    //   await
+                    //return;
+                    // }
+                    await showCupertinoDialog(
+                      context: context,
+                      builder: (context) => CupertinoAlertDialog(
+                        title: Container(
+                            width: 100,
+                            height: 100,
+                            child: Image.file(File(file!.path))),
+                        content: Text(
+                            '재능기부 등록하시겠습니까?\n제목: ${controllTitle.text}\n가격: ${controllPrice.text}원'),
+                        actions: [
+                          CupertinoDialogAction(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              "뒤로가기",
+                              style: TextStyle(color: AppColors.black),
                             ),
-                            CupertinoDialogAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                "작성하기",
-                                style: TextStyle(color: AppColors.darkGreen),
-                              ),
+                          ),
+                          CupertinoDialogAction(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              "작성하기",
+                              style: TextStyle(color: AppColors.darkGreen),
                             ),
-                          ],
-                        ),
-                      );
+                          ),
+                        ],
+                      ),
+                    );
                   },
                   child: Text(
                     '작성완료',
