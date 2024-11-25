@@ -205,6 +205,7 @@ class _GiveScreenState extends State<GiveScreen> {
           width: 99,
           height: 47,
           child: FloatingActionButton(
+            heroTag: "1",
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return GiveSubmit();
