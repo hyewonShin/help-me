@@ -201,8 +201,9 @@ class _AskSubmitState extends State<AskSubmit> {
                                     },
                                     child: const Text(
                                       "작성하기",
-                                      style:
-                                          TextStyle(color: AppColors.darkGreen),
+                                      style: TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 42, 54, 49)),
                                     ),
                                   ),
                                 ],
