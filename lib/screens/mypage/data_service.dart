@@ -28,8 +28,8 @@ class DataService {
       return Users.fromJson({
         "user_id": json["user_id"],
         "name": json["name"],
-        "give": List<String>.from(json["give"] ?? []),
-        "ask": List<String>.from(json["ask"] ?? []),
+        "give": List<Map<String, dynamic>>.from(json["give"] ?? []),
+        "ask": List<Map<String, dynamic>>.from(json["ask"] ?? []),
       });
     }).toList();
   }
@@ -50,7 +50,7 @@ class DataService {
     final user = usersList.firstWhere(
       (u) => u.userId == userId,
       orElse: () => Users(
-        //못찾았을시 반환 값
+        // 못 찾았을 시 반환 값
         userId: 0,
         name: 'Unknown',
         giveCart: [],
@@ -58,13 +58,11 @@ class DataService {
       ),
     );
 
-    // user의 giveCart에 있는 giveId를 순회
-    for (String giveIdStr in user.giveCart) {
-      // String -> int로 변환
-      int? giveId = int.tryParse(giveIdStr);
-
-      // 변환에 실패하거나 잘못된 ID인 경우 무시
-      if (giveId == null || giveId < 0) continue;
+    // user의 giveCart를 순회
+    for (var giveCartSet in user.giveCart) {
+      // Map 형식의 giveCartSet에서 give_id와 quantity 추출
+      final giveId = giveCartSet['give_id'];
+      final quantity = giveCartSet['quantity'];
 
       // giveList에서 giveId에 해당하는 Give 객체를 찾기
       final give = giveList.firstWhere(
@@ -93,6 +91,7 @@ class DataService {
         give.giveId,
         username,
         give.title,
+        quantity,
         give.price,
         give.image,
       ));
