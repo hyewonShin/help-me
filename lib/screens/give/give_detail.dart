@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:help_me/constant/colors.dart';
+import 'package:intl/intl.dart';
 
 class GiveDetail extends StatelessWidget {
   final String? image;
@@ -27,6 +28,8 @@ class GiveDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final comma = NumberFormat("#,###,###원");
+
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(),
@@ -125,18 +128,18 @@ class GiveDetail extends StatelessWidget {
               width: 10,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              padding: const EdgeInsets.all(20),
               child: SvgPicture.asset(
                 'assets/images/cart.svg',
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 1,
-                height: 60,
-                color: AppColors.lightGray,
-              ),
+            Container(
+              width: 1,
+              height: 60,
+              color: AppColors.lightGray,
+            ),
+            SizedBox(
+              width: 20,
             ),
             Column(
               children: [
@@ -145,35 +148,48 @@ class GiveDetail extends StatelessWidget {
                     SvgPicture.asset(
                       'assets/images/minus_btn.svg',
                     ),
-                    Text(' 수량 '),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 17.0),
+                      child: Text(
+                        '2',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.lightGreen),
+                      ),
+                    ),
                     SvgPicture.asset(
                       'assets/images/plus_btn.svg',
                     ),
                   ],
                 ),
-                Text('$price'),
+                Text(
+                  comma.format(price),
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: AppColors.black,
+                      fontWeight: FontWeight.w700),
+                ),
               ],
             ),
-            Text('구매하기 버튼')
+            SizedBox(
+              width: 140,
+            ),
+            ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.lightGreen,
+                    foregroundColor: AppColors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    minimumSize: Size(82, 45)),
+                child: Text(
+                  '구매하기',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                )),
           ]),
-          //   ],
-          // )
         ],
       ),
     );
   }
 }
-
-   // Image.network(image!, width: 111, height: 113, fit: BoxFit.cover),
-          // Text('${sellerId.toString()}'),
-          // Text('판매자의 재능기부 담기 횟수(user.json파일의 give의 횟수 ) > $sellerGive)'),
-          // Text('판매자의 재능 요청 횟수(user.json파일의 ask의 횟수 ) > $sellerAsk'),
-          // Text('$title'),
-          // Text('$desc'),
-          // Text('이용권 갯수'),
-          // Text('${price.toString()}'),
-          // GestureDetector(
-          //     onTap: () {
-          //       cartGiveData(giveId);
-          //     },
-          //     child: Icon(Icons.home)

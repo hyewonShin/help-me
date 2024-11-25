@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:help_me/screens/give/give_detail.dart';
 import 'package:help_me/screens/give/give_submit.dart';
+import 'package:intl/intl.dart';
 
 class GiveScreen extends StatefulWidget {
   const GiveScreen({super.key});
@@ -13,6 +14,8 @@ class GiveScreen extends StatefulWidget {
 }
 
 class _GiveScreenState extends State<GiveScreen> {
+  final comma = NumberFormat("#,###,###원");
+
   final giveJsonUrl = "lib/mock_data/give.json";
   final userJsonUrl = "lib/mock_data/users.json";
   List<dynamic> _giveData = [];
@@ -173,12 +176,7 @@ class _GiveScreenState extends State<GiveScreen> {
                                         style: TextStyle(
                                             color: AppColors.darkGray),
                                       ),
-                                      // Text(
-                                      //   item['give_id'].toString(), // test용
-                                      //   style: TextStyle(
-                                      //       color: AppColors.darkGray),
-                                      // ),
-                                      Text("1회 ${item['price']}원",
+                                      Text(comma.format(item['price']),
                                           style: TextStyle(
                                               color: AppColors.darkGreen,
                                               fontWeight: FontWeight.bold)),
