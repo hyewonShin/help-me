@@ -57,8 +57,24 @@ class _AskScreenState extends State<AskScreen> {
     return user?['name'];
   }
 
+  // user_id 기준으로 ask 갯수 확인하는 함수
+  Map<int, int> countUserData(List<dynamic> data) {
+    final Map<int, int> askCount = {};
+    for (var item in data) {
+      final userId = item['user_id'];
+      if (askCount.containsKey(userId)) {
+        askCount[userId] = askCount[userId]! + 1;
+      } else {
+        askCount[userId] = 1;
+      }
+    }
+    return askCount;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final askCount = countUserData(_askData);
+
     return Scaffold(
         backgroundColor: AppColors.white,
         body: Padding(
@@ -88,13 +104,18 @@ class _AskScreenState extends State<AskScreen> {
                       orElse: () => null,
                     );
                     final userName = getUserName(item['user_id']);
+                    final userId = item['user_id'] as int?;
+                    final numberOfAsk =
+                        (userId != null) ? (askCount[userId] ?? 0) : 0;
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                AskDetail(item: item, userData: userData),
+                            builder: (context) => AskDetail(
+                                item: item,
+                                userData: userData,
+                                numberOfAsk: numberOfAsk),
                           ),
                         );
                       },

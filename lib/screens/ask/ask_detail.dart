@@ -5,8 +5,13 @@ import 'package:help_me/screens/ask/ask_screen.dart' show wonCurrency;
 class AskDetail extends StatelessWidget {
   final dynamic item;
   final dynamic userData;
+  final int numberOfAsk;
 
-  const AskDetail({Key? key, required this.item, required this.userData})
+  const AskDetail(
+      {Key? key,
+      required this.item,
+      required this.userData,
+      required this.numberOfAsk})
       : super(key: key);
 
   @override
@@ -16,6 +21,19 @@ class AskDetail extends StatelessWidget {
       body: Column(
         children: [
           Text(userData?['name'] ?? 'Unknown'),
+          Row(
+            children: [
+              Text('재능 담기: ${userData?['give'].length ?? 'Unknown'}'),
+              SizedBox(width: 8),
+              Container(
+                width: 1,
+                height: 22,
+                color: AppColors.lightGray,
+              ),
+              SizedBox(width: 8),
+              Text('재능 요청: $numberOfAsk')
+            ], // user give length, ask join user_id
+          ),
           Text("사례금 ${wonCurrency(item['price'])}",
               style: TextStyle(
                   fontSize: 16,
