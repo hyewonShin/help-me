@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
-class MypageHelpList extends StatelessWidget {
-  const MypageHelpList({super.key});
+class MypageAskList extends StatelessWidget {
+  const MypageAskList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Text("MypageHelpList");
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('내가 요청한 재능'),
+        centerTitle: true,
+      ),
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [Container()],
+      ),
+    );
   }
 }
