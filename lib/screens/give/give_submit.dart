@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:help_me/widget/textfield.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
 
 class GiveSubmit extends StatefulWidget {
   const GiveSubmit({super.key});
@@ -15,14 +13,20 @@ class GiveSubmit extends StatefulWidget {
 }
 
 class _GiveSubmitState extends State<GiveSubmit> {
-  TextEditingController controllTitle =
+  TextEditingController controlTitle =
       TextEditingController(); //제목 textfield 데이터 받기
-  TextEditingController controllPrice =
+  TextEditingController controlPrice =
       TextEditingController(); //가격 textfield 데이터 받기
-  TextEditingController controllText =
-      TextEditingController(); //상세내용 textfiled 데이터 받기 controllText.text
+  TextEditingController controlText =
+      TextEditingController(); //상세내용 textfield 데이터 받기 controlText.text
   XFile? file;
   final _formKey = GlobalKey<FormState>();
+  void noPicture(file) {
+    setState(() {
+      file != null;
+    });
+  }
+
   Future<void> getImagePickerData() async {
     final imagePicker = ImagePicker();
     // Future<XFile?>
@@ -35,13 +39,6 @@ class _GiveSubmitState extends State<GiveSubmit> {
     }
     // url, assetPath,
   } //image picker
-
-  // String? isEmpty;
-  // void onSelected(String isEmpty) {
-  //   setState(() {
-  //     isEmpty = "공란";
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +65,9 @@ class _GiveSubmitState extends State<GiveSubmit> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xffCCCCCC))),
+                      border: file != null
+                          ? Border.all(color: Color(0xFFFD7563))
+                          : Border.all(color: Color(0xffCCCCCC))),
                   height: 60,
                   width: 60,
                   child: file != null
@@ -79,6 +78,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
                 ),
               ),
               Expanded(
+                //https://blog.everdu.com/83#3.%20%EB%B2%84%ED%8A%BC%EC%9D%84%20%ED%81%B4%EB%A6%AD%EC%8B%9C%20%EC%9C%A0%ED%9A%A8%EC%84%B1%20%EA%B2%80%EC%82%AC%ED%95%98%EA%B8%B0-1
                 child: Form(
                   key: _formKey,
                   child: ListView(
@@ -87,17 +87,17 @@ class _GiveSubmitState extends State<GiveSubmit> {
                       InputInfo(null, 1,
                           title: '제목',
                           hinttext: '도와줄 수 있는 내용을 입력해주세요.',
-                          control: controllTitle),
+                          control: controlTitle),
                       const SizedBox(height: 20),
                       InputInfo('', 1,
                           title: '가격',
                           hinttext: '제공할 재능 이용원의 가격을 적어주세요.',
-                          control: controllPrice),
+                          control: controlPrice),
                       const SizedBox(height: 20),
                       InputInfo(null, 3,
                           title: '상세설명',
                           hinttext: '제공할 재능의 상세 내용을 적어주세요',
-                          control: controllText),
+                          control: controlText),
                     ],
                   ),
                 ),
@@ -112,12 +112,30 @@ class _GiveSubmitState extends State<GiveSubmit> {
                 ///TODO WIDGET으로 모듈화
                 child: ElevatedButton(
                   onPressed: () async {
-                    // final formKeyState = _formKey.currentState!;
-                    // if (formKeyState.validate()) {
-                    //   formKeyState.save();
-                    // }
                     if (_formKey.currentState!.validate()) {}
-
+                    // if (file == null) {
+                    //   await showCupertinoDialog(
+                    //     context: context,
+                    //     builder: (context) => CupertinoAlertDialog(
+                    //       title: Container(
+                    //           width: 100,
+                    //           height: 100,
+                    //           child: Image.file(File(file!.path))),
+                    //       content: Text('이미지를 입력해주세요.'),
+                    //       actions: [
+                    //         CupertinoDialogAction(
+                    //           onPressed: () {
+                    //             Navigator.pop(context);
+                    //           },
+                    //           child: const Text(
+                    //             "확인",
+                    //             style: TextStyle(color: AppColors.black),
+                    //           ),
+                    //         )
+                    //       ],
+                    //     ),
+                    //   );
+                    // }
                     if (file != null)
                       await showCupertinoDialog(
                         context: context,
@@ -127,7 +145,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
                               height: 100,
                               child: Image.file(File(file!.path))),
                           content: Text(
-                              '재능기부 등록하시겠습니까?\n제목: ${controllTitle.text}\n가격: ${controllPrice.text}원'),
+                              '재능기부 등록하시겠습니까?\n제목: ${controlTitle.text}\n가격: ${controlPrice.text}원'),
                           actions: [
                             CupertinoDialogAction(
                               onPressed: () {
