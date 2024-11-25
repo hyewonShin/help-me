@@ -72,6 +72,29 @@ class _MypageGiveListState extends State<MypageGiveList> {
     //index를 파라미터로 받아 Container를 생성하는 함수
     GiveCartList give = giveList[index];
     String imgUrl = give.image;
+    int giveListQuantity = 0;
+
+    giveListQuantity =
+        dataService.getGiveQuantity(usersList, userLoginId, give.giveId);
+
+    // 수량 감소 함수
+    void decreaseQuantity() {
+      setState(() {
+        if (giveListQuantity > 0) {
+          giveListQuantity--; // 값 1 감소
+        }
+      });
+    }
+
+    // 수량 증가 함수 (옵션)
+    void increaseQuantity() {
+      dataService.increaseQuantity(usersList, userLoginId, give.giveId);
+      setState(() {
+        giveListQuantity =
+            dataService.getGiveQuantity(usersList, userLoginId, give.giveId);
+      });
+    }
+
     return Container(
       height: 153,
       width: double.infinity,
@@ -133,7 +156,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                     const SizedBox(
                       height: 16,
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
@@ -141,25 +164,32 @@ class _MypageGiveListState extends State<MypageGiveList> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Icon(
-                                Icons
-                                    .indeterminate_check_box, //+- 기능 넣기 ###########
-                                color: Color(0xFFD9D9D9),
+                              GestureDetector(
+                                onTap: decreaseQuantity, // 아이콘 터치 시 감소 함수 호출
+                                child: Icon(
+                                  Icons
+                                      .indeterminate_check_box, //+- 기능 넣기 ###########
+                                  color: Color(0xFFD9D9D9),
+                                ),
                               ),
-                              Text('2',
+                              Text('$giveListQuantity',
                                   style: TextStyle(
                                       color: Color(0xFF44D596),
                                       fontSize: 20,
                                       fontWeight:
                                           FontWeight.bold)), //수량넣기############
-                              Icon(
-                                Icons.add_box,
-                                color: Color(0xFFD9D9D9),
+                              GestureDetector(
+                                onTap: increaseQuantity, // 아이콘 터치 시 증가 함수 호출
+                                child: Icon(
+                                  Icons.add_box,
+                                  color: Color(0xFFD9D9D9),
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        Text('40,000원', //금액 변경 함수 넣기 #########
+                        Text(
+                            '${giveListQuantity * give.price}원', //금액 변경 함수 넣기 #########
                             style: TextStyle(
                               color: Color(0xFF222222),
                               fontSize: 20,

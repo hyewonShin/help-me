@@ -73,6 +73,16 @@ class Users {
         giveCart: json['give'],
         askCart: json['ask']);
   }
+
+  // JSON으로 변환하는 toJson() 메서드 추가
+  Map<String, dynamic> toJson() {
+    return {
+      'user_id': userId,
+      'name': name,
+      'give': giveCart,
+      'ask': askCart,
+    };
+  }
 }
 
 class GiveCartList {

@@ -91,7 +91,6 @@ class _GiveScreenState extends State<GiveScreen> {
     setState(() {
       userGiveList = {...userGiveList, ...giveList, giveId}.toList();
     });
-    print('userGiveList > $userGiveList');
   }
 
   @override

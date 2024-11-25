@@ -24,7 +24,7 @@ class _AskScreenState extends State<AskScreen> {
     try {
       final String response = await rootBundle.loadString(url);
       final data = json.decode(response);
-      print(data);
+      // print(data);
       setState(() {
         _data = data;
       });
