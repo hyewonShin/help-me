@@ -22,7 +22,7 @@ class _GiveScreenState extends State<GiveScreen> {
   List<dynamic> _sellerData = [];
   List<dynamic> userGiveList = []; // 내가 담은 재능 리스트
 
-  final USER_ID = 1; //현재 로그인한 사용자의 user_id 임의로 지정해둠
+  final USER_ID = 0; //현재 로그인한 사용자의 user_id 임의로 지정해둠
 
   String? image;
   String? title;
@@ -94,7 +94,6 @@ class _GiveScreenState extends State<GiveScreen> {
     setState(() {
       userGiveList = {...userGiveList, ...giveList, giveId}.toList();
     });
-    print('userGiveList > $userGiveList');
   }
 
   @override
@@ -134,15 +133,16 @@ class _GiveScreenState extends State<GiveScreen> {
                               context,
                               MaterialPageRoute(builder: (context) {
                                 return GiveDetail(
-                                    image: item['image'],
-                                    sellerId: item['user_id'],
-                                    title: item['title'],
-                                    desc: item['desc'],
-                                    price: item['price'],
-                                    sellerGive: _sellerData[0]['give'].length,
-                                    sellerAsk: _sellerData[0]['ask'].length,
-                                    giveId: item['give_id'],
-                                    cartGiveData: cartGiveData);
+                                  image: item['image'],
+                                  sellerId: item['user_id'],
+                                  title: item['title'],
+                                  desc: item['desc'],
+                                  price: item['price'] ?? 0,
+                                  sellerGive: _sellerData[0]['give'].length,
+                                  sellerAsk: _sellerData[0]['ask'].length,
+                                  giveId: item['give_id'],
+                                  cartGiveData: cartGiveData,
+                                );
                               }),
                             );
                           },

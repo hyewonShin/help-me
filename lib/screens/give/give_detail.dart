@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:intl/intl.dart';
 
-class GiveDetail extends StatelessWidget {
+class GiveDetail extends StatefulWidget {
   final String? image;
   final int? sellerId;
   final int? sellerGive;
@@ -14,28 +15,46 @@ class GiveDetail extends StatelessWidget {
   final int? giveId;
   final Function cartGiveData;
 
-  const GiveDetail(
-      {super.key,
-      this.image,
-      this.title,
-      this.desc,
-      this.price,
-      this.sellerId,
-      this.sellerGive,
-      this.sellerAsk,
-      this.giveId,
-      required this.cartGiveData});
+  const GiveDetail({
+    super.key,
+    this.image,
+    this.title,
+    this.desc,
+    this.price,
+    this.sellerId,
+    this.sellerGive,
+    this.sellerAsk,
+    this.giveId,
+    required this.cartGiveData,
+  });
+
+  @override
+  State<GiveDetail> createState() => _GiveDetailState();
+}
+
+class _GiveDetailState extends State<GiveDetail> {
+  int quantity = 1;
+  int totalPrice = 0;
+
+  void updateQuantity(bool delta) {
+    setState(() {
+      delta ? quantity++ : quantity--;
+      totalPrice = widget.price! * quantity;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final comma = NumberFormat("#,###,###원");
+
+    String productName = widget.title!.split(' ')[0];
 
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(),
       body: Column(
         children: [
-          Image.network(image!,
+          Image.network(widget.image!,
               width: double.infinity, height: 409, fit: BoxFit.cover),
           Padding(
             padding: const EdgeInsets.all(20.0),
@@ -43,7 +62,7 @@ class GiveDetail extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  sellerId.toString(),
+                  widget.sellerId.toString(),
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16,
@@ -58,7 +77,7 @@ class GiveDetail extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                             color: AppColors.darkGray)),
                     Text(
-                      '$sellerGive회',
+                      '${widget.sellerGive}회',
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -78,7 +97,7 @@ class GiveDetail extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                             color: AppColors.darkGray)),
                     Text(
-                      '$sellerAsk회',
+                      '${widget.sellerAsk}회',
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -94,7 +113,7 @@ class GiveDetail extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '$title',
+                  '${widget.title}',
                   style: TextStyle(
                       color: AppColors.black,
                       fontSize: 20,
@@ -106,7 +125,7 @@ class GiveDetail extends StatelessWidget {
                 SizedBox(
                   height: 110,
                   child: Text(
-                    '$desc',
+                    '${widget.desc}',
                     style: TextStyle(
                       fontSize: 16,
                       color: AppColors.black,
@@ -145,26 +164,36 @@ class GiveDetail extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    SvgPicture.asset(
-                      'assets/images/minus_btn.svg',
+                    GestureDetector(
+                      onTap: () {
+                        quantity > 1 ? updateQuantity(false) : null;
+                      },
+                      child: SvgPicture.asset(
+                        'assets/images/minus_btn.svg',
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 17.0),
                       child: Text(
-                        '2',
+                        quantity.toString(),
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
                             color: AppColors.lightGreen),
                       ),
                     ),
-                    SvgPicture.asset(
-                      'assets/images/plus_btn.svg',
+                    GestureDetector(
+                      onTap: () {
+                        quantity < 100 ? updateQuantity(true) : null;
+                      },
+                      child: SvgPicture.asset(
+                        'assets/images/plus_btn.svg',
+                      ),
                     ),
                   ],
                 ),
                 Text(
-                  comma.format(price),
+                  comma.format(quantity == 1 ? widget.price : totalPrice),
                   style: TextStyle(
                       fontSize: 20,
                       color: AppColors.black,
@@ -173,10 +202,44 @@ class GiveDetail extends StatelessWidget {
               ],
             ),
             SizedBox(
-              width: 140,
+              width: 135,
             ),
             ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  showCupertinoDialog(
+                      context: context,
+                      builder: (context) => CupertinoAlertDialog(
+                              title: Text(
+                                  '$productName 이용권 $quantity개를 구매하시겠습니까?'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  child: Text('취소'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                CupertinoDialogAction(
+                                  child: Text('확인'),
+                                  onPressed: () {
+                                    showCupertinoDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            CupertinoAlertDialog(
+                                              title: Text('구매 완료'),
+                                              actions: [
+                                                CupertinoDialogAction(
+                                                  child: Text('확인'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                )
+                                              ],
+                                            ));
+                                  },
+                                ),
+                              ]));
+                },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.lightGreen,
                     foregroundColor: AppColors.white,
