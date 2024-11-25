@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:help_me/screens/ask/ask_screen.dart';
 import 'package:help_me/screens/give/give_screen.dart';
-import 'package:help_me/screens/give/give_submit.dart';
-import 'package:help_me/screens/mypage/mypage_screen.dart';
 
-void main() {
+import 'package:help_me/screens/mypage/mypage_screen.dart';
+import 'package:help_me/util/save_json_to_file.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await saveJsonToFile("give.json", "lib/mock_data/give.json");
+  await saveJsonToFile("ask.json", "lib/mock_data/ask.json");
+  await saveJsonToFile("users.json", "lib/mock_data/users.json");
   runApp(const MyApp());
 }
 
