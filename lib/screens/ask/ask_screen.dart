@@ -70,28 +70,57 @@ class _AskScreenState extends State<AskScreen> {
                     itemCount: _askData.length,
                     itemBuilder: (context, index) {
                       final item = _askData[index];
-                      return SizedBox(
-                        width: 320,
+                      return Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        width: 362,
                         height: 110,
-                        child: ListTile(
-                          title: Text(item['title'],
-                              style: TextStyle(
-                                  fontSize: 16, color: AppColors.black)),
-                          subtitle: Column(
+                        decoration: BoxDecoration(
+                            border: index == _askData.length - 1
+                                ? null
+                                : Border(
+                                    bottom: BorderSide(
+                                        color: AppColors.lightGray, width: 1))),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text(item['title'],
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.black,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(height: 2),
                               Text(item['user_id'].toString(),
                                   style: TextStyle(
-                                    fontSize: 14,
-                                  )),
+                                      fontSize: 14, color: AppColors.darkGray)),
+                              SizedBox(height: 2),
                               Text("사례금 ${wonCurrency(item['price'])}",
                                   style: TextStyle(
-                                      color: AppColors.darkGreen,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
+                                      color: AppColors.darkGreen,
+                                      fontWeight: FontWeight.bold))
                             ],
                           ),
                         ),
+                        // title: Text(item['title'],
+                        //     style: TextStyle(
+                        //         fontSize: 16, color: AppColors.black)),
+                        // subtitle: Column(
+                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                        //   children: [
+                        //     Text(item['user_id'].toString(),
+                        //         style: TextStyle(
+                        //           fontSize: 14,
+                        //         )),
+                        //     Text("사례금 ${wonCurrency(item['price'])}",
+                        //         style: TextStyle(
+                        //             color: AppColors.darkGreen,
+                        //             fontSize: 16,
+                        //             fontWeight: FontWeight.bold)),
+                        //   ],
+                        // ),
                       );
                     }),
               ),
