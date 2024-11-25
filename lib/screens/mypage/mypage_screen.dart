@@ -200,9 +200,6 @@ class _MypageScreenState extends State<MypageScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MypageAskList(
-                                  askLists: userAskList, // userAskList 전달
-                                  decrementAskCount:
-                                      decrementAskCount, // decrementAskCount 전달
                                   userLoginId: userLoginId // userLoginId 전달
                                   ),
                             ));
