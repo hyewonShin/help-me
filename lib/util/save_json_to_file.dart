@@ -21,7 +21,7 @@ Future<void> saveJsonToFile(String fileName, String url) async {
   }
 }
 
-Future<void> writeDataToJSON(
+Future<void> writeDataToFile(
     Map<String, dynamic> newData, String fileName) async {
   try {
     final directory = await getApplicationDocumentsDirectory();
