@@ -86,7 +86,7 @@ Widget inputNumInfo(String title, String details, var control) {
           keyboardType: TextInputType.numberWithOptions(), //숫자용 키패드
           inputFormatters: [FilteringTextInputFormatter.digitsOnly], // 숫자만 입력가능
           // expands: true,
-          // maxLines: null,
+          maxLines: 3,
           // minLines: null,
           style: TextStyle(fontSize: 16),
           decoration: InputDecoration(

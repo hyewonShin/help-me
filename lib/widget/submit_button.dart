@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
-import 'package:help_me/widget/textfiled.dart';
+import 'package:help_me/widget/textfield.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -34,8 +34,9 @@ class SubmitButton extends StatelessWidget {
           showCupertinoDialog(
             context: context,
             builder: (context) => CupertinoAlertDialog(
-              title: Container(
-                  width: 100, height: 100, child: Image.file(File(file!.path))),
+              // title:
+              // Container(
+              //     width: 100, height: 100, child: Image.file(File(file!.path))),
               content: Text(
                   '재능기부 등록하시겠습니까?\n제목: ${controllTitle.text}\n가격: ${controllPrice.text}원'),
               actions: [
