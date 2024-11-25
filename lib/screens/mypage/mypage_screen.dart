@@ -16,7 +16,7 @@ class _MypageScreenState extends State<MypageScreen> {
   List<Ask> askList = [];
   List<Users> usersList = [];
   bool isLoading = true; // 로딩 상태를 관리(true : 로딩중, false : 로딩 완료)
-  int userLoginId = 1; // 로그인한 사용자 ID
+  int userLoginId = 0; // 로그인한 사용자 ID
   int giveCount = 0; //사용자가 담은 재능 개수
   int askCount = 0; //사용자가 요청한 재능개수
 
@@ -33,6 +33,7 @@ class _MypageScreenState extends State<MypageScreen> {
       final gives = await dataService.loadGives();
       final asks = await dataService.loadAsks();
       final users = await dataService.loadUsers();
+      print('bbb');
 
       setState(() {
         giveList = gives;

@@ -13,7 +13,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
   List<GiveCartList> giveList = []; // 데이터를 저장할 리스트
   List<Users> usersList = [];
   DataService dataService = DataService();
-  int userLoginId = 1; // 로그인한 사용자 ID
+  int userLoginId = 0; // 로그인한 사용자 ID
 
   @override
   void initState() {
