@@ -83,13 +83,18 @@ class _AskScreenState extends State<AskScreen> {
                   itemCount: _askData.length,
                   itemBuilder: (context, index) {
                     final item = _askData[index];
+                    final userData = _usersData.firstWhere(
+                      (user) => user['user_id'] == item['user_id'],
+                      orElse: () => null,
+                    );
                     final userName = getUserName(item['user_id']);
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => AskDetail(item: item),
+                            builder: (context) =>
+                                AskDetail(item: item, userData: userData),
                           ),
                         );
                       },
