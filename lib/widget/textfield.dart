@@ -7,17 +7,25 @@ class InputInfo extends StatefulWidget {
   String? textInputType; // 입력 및 키보드 타입 null=문자, !null=숫자
   String title; //제목 ex. title: "제목을 입력해주세요."
   String hinttext; //힌트 택스트 문자 ex. hinttext: "힌트를 입력해주세요."
-  var control; //TextEditingController ex. control: controllTitle(변수 정의!)
+  String? data; //데이터 담는곳
   int? maxLines; // maxline수(줄 개수)
+  Function changeValue;
 
-  InputInfo(this.textInputType, this.maxLines,
-      {required this.title, required this.hinttext, this.control});
+  InputInfo(
+    this.textInputType,
+    this.maxLines, {
+    required this.title,
+    required this.hinttext,
+    this.data,
+    required this.changeValue,
+  });
 
   @override
   State<InputInfo> createState() => _InputInfoState();
 }
 
 class _InputInfoState extends State<InputInfo> {
+  String? data; //데이터 담는곳
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,7 +33,7 @@ class _InputInfoState extends State<InputInfo> {
       children: [
         Text(
           '${widget.title}',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         SizedBox(height: 5),
         Container(
@@ -33,7 +41,9 @@ class _InputInfoState extends State<InputInfo> {
 
           child: TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            controller: widget.control,
+            onSaved: (value) {
+              widget.changeValue(value, widget.title);
+            },
             keyboardType: widget.textInputType == null
                 ? null
                 : TextInputType.numberWithOptions(), //숫자용 키패드
@@ -63,14 +73,16 @@ class _InputInfoState extends State<InputInfo> {
               hintStyle: TextStyle(
                   color: AppColors.lightGray, fontWeight: FontWeight.bold),
               border: OutlineInputBorder(
-                  borderSide: BorderSide()), //color: Color borderColor//외곽선
+                borderSide: BorderSide(color: AppColors.lightGray),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: AppColors.lightGreen,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ), //color: Color borderColor//외곽선
             ),
-            // onChanged: (value) {
-            //   setState(() {
-            //     Color borderColor =
-            //         value.isNotEmpty ? AppColors.black : Color(0xFFFD7563);
-            //   });
-            // },
           ),
         ),
       ],
