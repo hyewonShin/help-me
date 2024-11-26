@@ -16,9 +16,9 @@ class AskSubmit extends StatefulWidget {
 class _AskSubmitState extends State<AskSubmit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  late final String? _title;
-  late final String? _price;
-  late final String? _desc;
+  String? _title;
+  String? _price;
+  String? _desc;
 
   List<dynamic> askData = [];
 
