@@ -43,6 +43,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<String> title = ["재능기부", "재능요청", "마이페이지"];
 
+  final PageController _pageController = PageController();
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -61,11 +62,19 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        body: IndexedStack(index: _selectedIndex, children: [
-          GiveScreen(),
-          AskScreen(),
-          MypageScreen(),
-        ]),
+        body: PageView(
+          controller: _pageController,
+          children: [
+            GiveScreen(),
+            AskScreen(),
+            MypageScreen(),
+          ],
+          onPageChanged: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+        ),
         bottomNavigationBar: BottomNavigationBar(
           selectedItemColor: AppColors.lightGreen,
           unselectedItemColor: AppColors.darkGray,
@@ -77,9 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 icon: Icon(Icons.person_2_outlined), label: '마이페이지'),
           ],
           onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
+            _pageController.jumpToPage(index);
           },
         ));
   }
