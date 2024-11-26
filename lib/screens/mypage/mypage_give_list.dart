@@ -15,6 +15,7 @@ class MypageGiveList extends StatefulWidget {
 }
 
 class _MypageGiveListState extends State<MypageGiveList> {
+  bool isLoading = true; // 로딩 상태를 관리(true : 로딩중, false : 로딩 완료)
   List<int> giveIdList = []; // List<GiveCartList> 타입으로 수정
   List<Users> usersList = [];
   DataService dataService = DataService();
@@ -31,18 +32,29 @@ class _MypageGiveListState extends State<MypageGiveList> {
   }
 
   Future<void> loadData() async {
-    gives = await loadDataFromDocument("give.json");
-    users = await loadDataFromDocument("users.json");
+    try {
+      gives = await loadDataFromDocument("give.json");
+      users = await loadDataFromDocument("users.json");
 
-    setState(() {
-      // 로그인한 사용자 ID에 맞는 'give' 데이터를 필터링하여 가져옴
-      giveIdList = dataService.findGiveIdsByUserId(users, userLoginId);
-      usersList = dataService.convertDynamicListToUsersList(users);
-    });
+      setState(() {
+        // 로그인한 사용자 ID에 맞는 'give' 데이터를 필터링하여 가져옴
+        giveIdList = dataService.findGiveIdsByUserId(users, userLoginId);
+        usersList = dataService.convertDynamicListToUsersList(users);
+      });
+      isLoading = false;
+    } catch (e) {
+      print('데이터 로드 에러: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      //로딩 중 보여주는 화면
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -56,114 +68,119 @@ class _MypageGiveListState extends State<MypageGiveList> {
         centerTitle: true,
       ),
       backgroundColor: AppColors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Container(
-              height: 650,
-              decoration: const BoxDecoration(
-                color: AppColors.white,
-              ),
-              child: giveIdList.isEmpty
-                  ? Column(
-                      children: [
-                        SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: Icon(
-                            Icons.cancel,
-                            color: AppColors.lightGreen,
-                          ),
-                        ),
-                        Text(
-                          '담은 재능이 없습니다!',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.black,
-                          ),
-                        ),
-                      ],
-                    )
-                  : ListView.builder(
-                      itemCount: giveIdList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return buildContainerList(index); // giveList[index] 사용
-                      },
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Container(
+                    height: 650,
+                    decoration: const BoxDecoration(
+                      color: AppColors.white,
                     ),
-            ),
-            SizedBox(
-              height: 48,
-            ),
-            Container(
-              width: 370,
-              height: 42,
-              decoration: ShapeDecoration(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.lightGreen,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    child: giveIdList.isEmpty
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: Icon(
+                                  Icons.cancel,
+                                  color: AppColors.lightGreen,
+                                ),
+                              ),
+                              Text(
+                                '담은 재능이 없습니다!',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ],
+                          )
+                        : ListView.builder(
+                            itemCount: giveIdList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return buildContainerList(
+                                  index); // giveList[index] 사용
+                            },
+                          ),
                   ),
-                ),
-                onPressed: () {
-                  int totalSumPrice = 0; //장바구니 총 금액
-                  for (int i = 0; i < giveIdList.length; i++) {
-                    int price =
-                        dataService.findPriceByGiveId(gives, giveIdList[i]);
-                    int quantity = dataService.findQuantityByUserIdAndGiveId(
-                        users, userLoginId, giveIdList[i]);
-                    totalSumPrice += price * quantity;
-                  }
+                  SizedBox(
+                    height: 48,
+                  ),
+                  Container(
+                    width: 370,
+                    height: 42,
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.lightGreen,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        int totalSumPrice = 0; //장바구니 총 금액
+                        for (int i = 0; i < giveIdList.length; i++) {
+                          int price = dataService.findPriceByGiveId(
+                              gives, giveIdList[i]);
+                          int quantity =
+                              dataService.findQuantityByUserIdAndGiveId(
+                                  users, userLoginId, giveIdList[i]);
+                          totalSumPrice += price * quantity;
+                        }
 
-                  showCupertinoDialog(
-                    context: context,
-                    builder: (context) {
-                      return CupertinoAlertDialog(
-                        title: Text('모두 구매하시겠습니까?'),
-                        content: Text('금액 : ${comma.format(totalSumPrice)}'),
-                        actions: [
-                          CupertinoDialogAction(
-                            isDefaultAction: true,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('취소'),
-                          ),
-                          CupertinoDialogAction(
-                            isDestructiveAction: true,
-                            onPressed: () {
-                              int count = 0;
-                              Navigator.of(context).popUntil((route) {
-                                count++;
-                                return count == 3;
-                              });
-                            },
-                            child: Text('확인'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Text(
-                  '모두 구매 하기',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.white,
+                        showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return CupertinoAlertDialog(
+                              title: Text('모두 구매하시겠습니까?'),
+                              content:
+                                  Text('금액 : ${comma.format(totalSumPrice)}'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  isDefaultAction: true,
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('취소'),
+                                ),
+                                CupertinoDialogAction(
+                                  isDestructiveAction: true,
+                                  onPressed: () {
+                                    int count = 0;
+                                    Navigator.of(context).popUntil((route) {
+                                      count++;
+                                      return count == 3;
+                                    });
+                                  },
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        '모두 구매 하기',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
