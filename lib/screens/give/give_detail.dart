@@ -144,107 +144,115 @@ class _GiveDetailState extends State<GiveDetail> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              child: Container(
-                height: 1,
-                color: AppColors.lightGray,
-              ),
-            ),
           ],
         ),
         Positioned(
-          bottom: 30,
-          child: Row(children: [
-            SizedBox(
-              width: 10,
-            ),
-            GestureDetector(
-              onTap: () {
-                showCupertinoDialog(
-                    context: context,
-                    builder: (context) => CupertinoAlertDialog(
-                          title: Text('장바구니에 담겼습니다'),
-                          actions: [
-                            CupertinoDialogAction(
-                              child: Text('확인'),
-                              onPressed: () {
-                                updateQuantity(
-                                    userLoginId, widget.giveId!, quantity);
-                                Navigator.of(context).pop();
-                              },
-                            )
-                          ],
-                        ));
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: SvgPicture.asset(
-                  'assets/images/cart.svg',
+          left: 0,
+          right: 0,
+          bottom: MediaQuery.of(context).size.height * 0.03,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: Container(
+                  height: 1,
+                  color: AppColors.lightGray,
                 ),
               ),
-            ),
-            Container(
-              width: 1,
-              height: 60,
-              color: AppColors.lightGray,
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            widget.price == 0
-                ? Text(
-                    "무료",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  )
-                : Column(
-                    children: [
-                      Row(
+              Row(children: [
+                SizedBox(
+                  width: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showCupertinoDialog(
+                        context: context,
+                        builder: (context) => CupertinoAlertDialog(
+                              title: Text('장바구니에 담겼습니다'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  child: Text('확인'),
+                                  onPressed: () {
+                                    updateQuantity(
+                                        userLoginId, widget.giveId!, quantity);
+                                    Navigator.of(context).pop();
+                                  },
+                                )
+                              ],
+                            ));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: SvgPicture.asset(
+                      'assets/images/cart.svg',
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 60,
+                  color: AppColors.lightGray,
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                widget.price == 0
+                    ? Text(
+                        "무료",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      )
+                    : Column(
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              quantity > 0 ? changeQuantity(false) : null;
-                            },
-                            child: SvgPicture.asset(
-                              'assets/images/minus_btn.svg',
-                            ),
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  quantity > 0 ? changeQuantity(false) : null;
+                                },
+                                child: SvgPicture.asset(
+                                  'assets/images/minus_btn.svg',
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 17.0),
+                                child: Text(
+                                  quantity.toString(),
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.lightGreen),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  quantity < 100 ? changeQuantity(true) : null;
+                                },
+                                child: SvgPicture.asset(
+                                  'assets/images/plus_btn.svg',
+                                ),
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 17.0),
-                            child: Text(
-                              quantity.toString(),
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.lightGreen),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              quantity < 100 ? changeQuantity(true) : null;
-                            },
-                            child: SvgPicture.asset(
-                              'assets/images/plus_btn.svg',
-                            ),
+                          Text(
+                            comma.format(
+                                quantity == 1 ? widget.price : totalPrice),
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: AppColors.black,
+                                fontWeight: FontWeight.w700),
                           ),
                         ],
                       ),
-                      Text(
-                        comma.format(quantity == 1 ? widget.price : totalPrice),
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ],
-                  ),
-          ]),
+              ]),
+            ],
+          ),
         ),
         Positioned(
-          bottom: 35,
-          left: 300,
-          right: 20,
+          bottom: MediaQuery.of(context).size.height * 0.04,
+          left: MediaQuery.of(context).size.width * 0.7,
+          right: MediaQuery.of(context).size.width * 0.05,
           child: ElevatedButton(
               onPressed: () {
                 showCupertinoDialog(
