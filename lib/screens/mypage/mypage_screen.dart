@@ -3,6 +3,7 @@ import 'mypage_ask_list.dart';
 import 'mypage_give_list.dart';
 import 'data_service.dart';
 import 'models.dart';
+import 'package:help_me/util/load_data_from_document.dart';
 
 class MypageScreen extends StatefulWidget {
   const MypageScreen({super.key});
@@ -21,6 +22,7 @@ class _MypageScreenState extends State<MypageScreen> {
   int userLoginId = 0; // 로그인한 사용자 ID
   int giveCount = 0; //사용자가 담은 재능 개수
   int askCount = 0; //사용자가 요청한 재능개수
+  String userName = ''; // 로그인한 사용자 이름
 
   final DataService dataService = DataService();
 
@@ -30,41 +32,28 @@ class _MypageScreenState extends State<MypageScreen> {
     loadData(); // 데이터 로드
   }
 
-  void decrementAskCount() {
-    setState(() {
-      if (askCount > 0) {
-        askCount -= 1;
-      }
-    });
-  }
-
   Future<void> loadData() async {
     try {
-      final gives = await dataService.loadGives();
-      final asks = await dataService.loadAsks();
-      final users = await dataService.loadUsers();
-      final giveCart =
-          dataService.createGiveCartList(gives, users, userLoginId);
+      final asks = await loadDataFromDocument("ask.json");
+      final users = await loadDataFromDocument("users.json");
+      final userNameOfLoginUser =
+          users.firstWhere((user) => user["user_id"] == userLoginId)["name"];
+      List<dynamic> giveList =
+          users.firstWhere((user) => user["user_id"] == userLoginId)["give"];
+      final asksOfLoginUser = asks
+          .where((item) => item["user_id"] == userLoginId)
+          .toList()
+          .map((ask) => ask = {...ask, "name": userNameOfLoginUser})
+          .toList();
 
       setState(() {
-        giveList = gives;
-        askList = asks;
-        usersList = users;
-        giveCartList = giveCart;
-        userAskList =
-            askList.where((ask) => ask.userId == userLoginId).toList();
-
-        giveCount = giveCart.length; // 재능 담기 개수 계산
-        askCount = askList
-            .where((ask) => ask.userId == userLoginId)
-            .length; // 재능 요청 개수 계산
-
-        isLoading = false;
+        askCount = asksOfLoginUser.length;
+        giveCount = giveList.length;
+        userName = userNameOfLoginUser;
       });
+
+      isLoading = false;
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
       print('데이터 로드 에러: $e');
     }
   }
@@ -112,7 +101,7 @@ class _MypageScreenState extends State<MypageScreen> {
                           children: [
                             Text(
                                 //userId를 이용하여 사용자의 이름 표시
-                                '${dataService.getNameByUserId(usersList, userLoginId)}',
+                                '${userName}',
                                 style: const TextStyle(
                                   color: Color(0xFF222222),
                                   fontSize: 16,
@@ -167,14 +156,19 @@ class _MypageScreenState extends State<MypageScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 30,
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return MypageGiveList();
-                        }));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MypageGiveList(),
+                          ),
+                        ).then((_) {
+                          // 다른 페이지(MypageGiveList)에서 돌아온 후 데이터 로드
+                          loadData();
+                        });
                       },
                       child: const Row(
                         children: [
@@ -192,7 +186,7 @@ class _MypageScreenState extends State<MypageScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 12,
+                      height: 30,
                     ),
                     GestureDetector(
                       onTap: () {
