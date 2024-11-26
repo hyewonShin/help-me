@@ -44,7 +44,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
     final newGive = {
       "ask_id": giveData.length,
       "user_id": 0,
-      "image": Image.file(File(file!.path)),
+      "image": file!.path,
       "title": _title,
       "desc": _desc,
       "price": _price
