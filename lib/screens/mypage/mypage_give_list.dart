@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:help_me/util/load_data_from_document.dart';
 import 'package:help_me/util/delete_usersgive_to_document.dart';
 import 'package:intl/intl.dart';
+import 'package:help_me/constant/colors.dart';
 
 class MypageGiveList extends StatefulWidget {
   const MypageGiveList({super.key});
@@ -47,14 +48,14 @@ class _MypageGiveListState extends State<MypageGiveList> {
         title: const Text(
           '내가 담은 재능',
           style: TextStyle(
-            color: Color(0xFF222222),
+            color: AppColors.black,
             fontSize: 20,
             fontWeight: FontWeight.w700,
           ),
         ),
         centerTitle: true,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -62,7 +63,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
             Container(
               height: 650,
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
               ),
               child: giveIdList.isEmpty
                   ? Column(
@@ -72,7 +73,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                           height: 40,
                           child: Icon(
                             Icons.cancel,
-                            color: Color(0xFF44D596),
+                            color: AppColors.lightGreen,
                           ),
                         ),
                         Text(
@@ -80,7 +81,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
-                            color: Color(0xFF222222),
+                            color: AppColors.black,
                           ),
                         ),
                       ],
@@ -105,7 +106,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
               ),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF44D596),
+                  backgroundColor: AppColors.lightGreen,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -155,7 +156,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
               ),
@@ -217,7 +218,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                         Text(
                           '${dataService.findTitleByGiveId(gives, giveIdList[index])}', //***
                           style: const TextStyle(
-                            color: Color(0xFF222222),
+                            color: AppColors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -238,7 +239,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                     Text(
                       '$userName',
                       style: const TextStyle(
-                        color: Color(0xFF9E9E9E),
+                        color: AppColors.darkGray,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
@@ -246,7 +247,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                     Text(
                       '1회 ${comma.format(price)}', //***
                       style: const TextStyle(
-                        color: Color(0xFF17B36F),
+                        color: AppColors.darkGreen,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
@@ -266,13 +267,13 @@ class _MypageGiveListState extends State<MypageGiveList> {
                                 },
                                 child: Icon(
                                   Icons.indeterminate_check_box,
-                                  color: Color(0xFFD9D9D9),
+                                  color: AppColors.lightGray,
                                 ),
                               ),
                               Text(
                                 '$quantity',
                                 style: TextStyle(
-                                  color: Color(0xFF44D596),
+                                  color: AppColors.lightGreen,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -283,7 +284,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                                 },
                                 child: Icon(
                                   Icons.add_box,
-                                  color: Color(0xFFD9D9D9),
+                                  color: AppColors.lightGray,
                                 ),
                               ),
                             ],
@@ -292,7 +293,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                         Text(
                           '${comma.format(totalPrice)}',
                           style: TextStyle(
-                            color: Color(0xFF222222),
+                            color: AppColors.black,
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
                           ),

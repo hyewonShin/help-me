@@ -4,6 +4,7 @@ import 'mypage_give_list.dart';
 import 'data_service.dart';
 import 'models.dart';
 import 'package:help_me/util/load_data_from_document.dart';
+import 'package:help_me/constant/colors.dart';
 
 class MypageScreen extends StatefulWidget {
   const MypageScreen({super.key});
@@ -72,7 +73,7 @@ class _MypageScreenState extends State<MypageScreen> {
                   children: [
                     const Text('마이페이지',
                         style: TextStyle(
-                          color: Color(0xFF222222),
+                          color: AppColors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
                         )),
@@ -83,10 +84,10 @@ class _MypageScreenState extends State<MypageScreen> {
                       width: 366,
                       height: 90,
                       decoration: ShapeDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         shape: RoundedRectangleBorder(
                           side: const BorderSide(
-                              width: 1, color: Color(0xFFD9D9D9)),
+                              width: 1, color: AppColors.lightGray),
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
@@ -99,7 +100,7 @@ class _MypageScreenState extends State<MypageScreen> {
                                 //userId를 이용하여 사용자의 이름 표시
                                 '${userName}',
                                 style: const TextStyle(
-                                  color: Color(0xFF222222),
+                                  color: AppColors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
                                 )),
@@ -107,13 +108,13 @@ class _MypageScreenState extends State<MypageScreen> {
                               children: [
                                 const Text('재능 담기',
                                     style: TextStyle(
-                                      color: Color(0xFF9E9E9E),
+                                      color: AppColors.darkGray,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     )),
                                 Text(' $giveCount회 ',
                                     style: const TextStyle(
-                                      color: Color(0xFF44D596),
+                                      color: AppColors.lightGreen,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     )),
@@ -121,16 +122,16 @@ class _MypageScreenState extends State<MypageScreen> {
                                     width: 1,
                                     height: 22,
                                     decoration: const BoxDecoration(
-                                        color: Color(0xFFD9D9D9))),
+                                        color: AppColors.lightGray)),
                                 const Text(' 재능 요청',
                                     style: TextStyle(
-                                      color: Color(0xFF9E9E9E),
+                                      color: AppColors.darkGray,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     )),
                                 Text(' $askCount회 ',
                                     style: const TextStyle(
-                                      color: Color(0xFF44D596),
+                                      color: AppColors.lightGreen,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     )),
@@ -146,7 +147,7 @@ class _MypageScreenState extends State<MypageScreen> {
                     const Text(
                       '나의 거래',
                       style: TextStyle(
-                        color: Color(0xFF222222),
+                        color: AppColors.black,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),
@@ -174,7 +175,7 @@ class _MypageScreenState extends State<MypageScreen> {
                           ),
                           Text('내가 담은 재능',
                               style: TextStyle(
-                                color: Color(0xFF222222),
+                                color: AppColors.black,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ))
@@ -202,7 +203,7 @@ class _MypageScreenState extends State<MypageScreen> {
                           ),
                           Text('내가 요청한 재능',
                               style: TextStyle(
-                                color: Color(0xFF222222),
+                                color: AppColors.black,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ))
