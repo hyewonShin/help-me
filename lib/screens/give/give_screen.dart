@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:help_me/screens/give/give_detail.dart';
 import 'package:help_me/screens/give/give_submit.dart';
+import 'package:intl/intl.dart';
 
 class GiveScreen extends StatefulWidget {
   const GiveScreen({super.key});
@@ -13,13 +14,15 @@ class GiveScreen extends StatefulWidget {
 }
 
 class _GiveScreenState extends State<GiveScreen> {
+  final comma = NumberFormat("#,###,###원");
+
   final giveJsonUrl = "lib/mock_data/give.json";
   final userJsonUrl = "lib/mock_data/users.json";
   List<dynamic> _giveData = [];
   List<dynamic> _sellerData = [];
   List<dynamic> userGiveList = []; // 내가 담은 재능 리스트
 
-  final USER_ID = 1; //현재 로그인한 사용자의 user_id 임의로 지정해둠
+  final USER_ID = 0; //현재 로그인한 사용자의 user_id 임의로 지정해둠
 
   String? image;
   String? title;
@@ -130,15 +133,16 @@ class _GiveScreenState extends State<GiveScreen> {
                               context,
                               MaterialPageRoute(builder: (context) {
                                 return GiveDetail(
-                                    image: item['image'],
-                                    sellerId: item['user_id'],
-                                    title: item['title'],
-                                    desc: item['desc'],
-                                    price: item['price'],
-                                    sellerGive: _sellerData[0]['give'].length,
-                                    sellerAsk: _sellerData[0]['ask'].length,
-                                    giveId: item['give_id'],
-                                    cartGiveData: cartGiveData);
+                                  image: item['image'],
+                                  sellerId: item['user_id'],
+                                  title: item['title'],
+                                  desc: item['desc'],
+                                  price: item['price'] ?? 0,
+                                  sellerGive: _sellerData[0]['give'].length,
+                                  sellerAsk: _sellerData[0]['ask'].length,
+                                  giveId: item['give_id'],
+                                  cartGiveData: cartGiveData,
+                                );
                               }),
                             );
                           },
@@ -172,12 +176,7 @@ class _GiveScreenState extends State<GiveScreen> {
                                         style: TextStyle(
                                             color: AppColors.darkGray),
                                       ),
-                                      Text(
-                                        item['give_id'].toString(), // test용
-                                        style: TextStyle(
-                                            color: AppColors.darkGray),
-                                      ),
-                                      Text("1회 ${item['price']}원",
+                                      Text(comma.format(item['price']),
                                           style: TextStyle(
                                               color: AppColors.darkGreen,
                                               fontWeight: FontWeight.bold)),
@@ -204,6 +203,7 @@ class _GiveScreenState extends State<GiveScreen> {
           width: 99,
           height: 47,
           child: FloatingActionButton(
+            heroTag: "1",
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return GiveSubmit();

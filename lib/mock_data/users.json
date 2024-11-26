@@ -6,8 +6,7 @@
       { "give_id": 2, "quantity": 2 },
       { "give_id": 3, "quantity": 1 },
       { "give_id": 4, "quantity": 1 }
-    ],
-    "ask": [{ "ask_id": 1 }, { "ask_id": 4 }, { "ask_id": 7 }, { "ask_id": 8 }]
+    ]
   },
   {
     "user_id": 1,
@@ -16,8 +15,7 @@
       { "give_id": 4, "quantity": 2 },
       { "give_id": 5, "quantity": 1 },
       { "give_id": 2, "quantity": 1 }
-    ],
-    "ask": [{ "ask_id": 2 }, { "ask_id": 3 }]
+    ]
   },
   {
     "user_id": 2,
@@ -25,45 +23,38 @@
     "give": [
       { "give_id": 5, "quantity": 1 },
       { "give_id": 7, "quantity": 1 }
-    ],
-    "ask": [{ "ask_id": 5 }]
+    ]
   },
   {
     "user_id": 3,
     "name": "햄스터빵빵",
-    "give": [{ "give_id": 4, "quantity": 2 }],
-    "ask": []
+    "give": [{ "give_id": 4, "quantity": 2 }]
   },
   {
     "user_id": 4,
     "name": "몽글몽글젤리",
-    "give": [{ "give_id": 9, "quantity": 2 }],
-    "ask": [{ "ask_id": 1 }]
+    "give": [{ "give_id": 9, "quantity": 2 }]
   },
   {
     "user_id": 5,
     "name": "꼬물꼬물두더지",
-    "give": [],
-    "ask": [{ "ask_id": 9 }]
+    "give": []
   },
 
   {
     "user_id": 6,
     "name": "춤추는나비",
-    "give": [],
-    "ask": []
+    "give": []
   },
   {
     "user_id": 7,
     "name": "노래하는새",
-    "give": [],
-    "ask": []
+    "give": []
   },
   {
     "user_id": 8,
     "name": "햇살가득한미소",
-    "give": [],
-    "ask": []
+    "give": []
   },
   {
     "user_id": 9,
@@ -71,13 +62,11 @@
     "give": [
       { "give_id": 2, "quantity": 2 },
       { "give_id": 5, "quantity": 1 }
-    ],
-    "ask": []
+    ]
   },
   {
     "user_id": 10,
     "name": "신나는모험",
-    "give": [{ "give_id": 9, "quantity": 3 }],
-    "ask": []
+    "give": [{ "give_id": 9, "quantity": 3 }]
   }
 ]

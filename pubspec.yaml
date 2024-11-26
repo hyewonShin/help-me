@@ -12,10 +12,16 @@ dependencies:
   flutter:
     sdk: flutter
   currency_text_input_formatter: ^2.2.6
+<<<<<<< HEAD
   path_provider: ^2.0.0
+=======
+  flutter_svg: ^2.0.9
+  intl: ^0.18.0
+>>>>>>> 7b4434decf4576aa71072e915ff9da0a8148ee81
 
   cupertino_icons: ^1.0.8
   image_picker: ^1.1.2
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -32,6 +38,7 @@ flutter:
     - lib/mock_data/ask.json
     - lib/mock_data/give.json
     - lib/mock_data/users.json
+    - assets/images/
 
   fonts:
     - family: Pretendard
