@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:help_me/screens/give/give_detail.dart';
 import 'package:help_me/screens/give/give_submit.dart';
+import 'package:help_me/util/load_data_from_document.dart';
 import 'package:intl/intl.dart';
 
 class GiveScreen extends StatefulWidget {
@@ -14,16 +13,11 @@ class GiveScreen extends StatefulWidget {
 }
 
 class _GiveScreenState extends State<GiveScreen> {
-  final comma = NumberFormat("#,###,###원");
-
-  final giveJsonUrl = "lib/mock_data/give.json";
-  final userJsonUrl = "lib/mock_data/users.json";
-  List<dynamic> _giveData = [];
-  List<dynamic> _sellerData = [];
-  List<dynamic> userGiveList = []; // 내가 담은 재능 리스트
-
   final USER_ID = 0; //현재 로그인한 사용자의 user_id 임의로 지정해둠
+  final comma = NumberFormat("#,###,###원");
+  List<dynamic> _giveData = [];
 
+  // give_submit 페이지에서 등록하는 데이터
   String? image;
   String? title;
   String? desc;
@@ -32,38 +26,43 @@ class _GiveScreenState extends State<GiveScreen> {
   @override
   void initState() {
     super.initState();
-    _loadData(giveJsonUrl);
+    _loadCombineData();
   }
 
-  Future<void> _loadData(url) async {
+  Future<void> _loadCombineData() async {
     try {
-      final String response = await rootBundle.loadString(url);
-      final data = json.decode(response);
+      final giveData = await loadDataFromDocument("give.json");
+      final userData = await loadDataFromDocument("users.json");
+      final askData = await loadDataFromDocument("ask.json");
+
+      final combinedData = giveData.map((giveItem) {
+        final user = userData.firstWhere(
+            (userItem) => userItem['user_id'] == giveItem['user_id'],
+            orElse: () => null);
+
+        final sellerAsk = askData
+            .where(
+              (askItem) => askItem['user_id'] == giveItem['user_id'],
+            )
+            .length;
+
+        return {
+          ...giveItem,
+          'seller_name': user['name'],
+          'seller_give': user['give'].length,
+          'seller_ask': sellerAsk
+        };
+      }).toList();
+
       setState(() {
-        _giveData = data;
+        _giveData = combinedData;
       });
     } catch (e) {
       print('error: $e');
     }
   }
 
-  Future<void> _loadAndFindSellerData(url, sellerId) async {
-    try {
-      final String response = await rootBundle.loadString(url);
-      final data = json.decode(response);
-
-      final filterData =
-          data.where((item) => item['user_id'] == sellerId).toList();
-
-      setState(() {
-        _sellerData = filterData;
-      });
-    } catch (e) {
-      print('error: $e');
-    }
-  }
-
-  void submitGiveData({
+  void submitAskData({
     image,
     title,
     price,
@@ -80,19 +79,6 @@ class _GiveScreenState extends State<GiveScreen> {
         "price": price,
         "desc": desc,
       });
-    });
-  }
-
-  void cartGiveData(giveId) async {
-    final String response = await rootBundle.loadString(userJsonUrl);
-    final data = json.decode(response);
-
-    final user = data.where((item) => item['user_id'] == USER_ID).toList();
-
-    List giveList = user[0]['give'];
-
-    setState(() {
-      userGiveList = {...userGiveList, ...giveList, giveId}.toList();
     });
   }
 
@@ -127,21 +113,18 @@ class _GiveScreenState extends State<GiveScreen> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            _loadAndFindSellerData(
-                                userJsonUrl, item['user_id']);
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) {
                                 return GiveDetail(
                                   image: item['image'],
-                                  sellerId: item['user_id'],
+                                  sellerName: item['seller_name'],
                                   title: item['title'],
                                   desc: item['desc'],
                                   price: item['price'] ?? 0,
-                                  sellerGive: _sellerData[0]['give'].length,
-                                  sellerAsk: _sellerData[0]['ask'].length,
+                                  sellerGive: item['seller_give'],
+                                  sellerAsk: item['seller_ask'],
                                   giveId: item['give_id'],
-                                  cartGiveData: cartGiveData,
                                 );
                               }),
                             );
@@ -172,7 +155,7 @@ class _GiveScreenState extends State<GiveScreen> {
                                             TextStyle(color: AppColors.black),
                                       ),
                                       Text(
-                                        "사용자",
+                                        item['seller_name'],
                                         style: TextStyle(
                                             color: AppColors.darkGray),
                                       ),

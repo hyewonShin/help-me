@@ -6,14 +6,13 @@ import 'package:intl/intl.dart';
 
 class GiveDetail extends StatefulWidget {
   final String? image;
-  final int? sellerId;
+  final String? sellerName;
   final int? sellerGive;
   final int? sellerAsk;
   final String? title;
   final String? desc;
   final int? price;
   final int? giveId;
-  final Function cartGiveData;
 
   const GiveDetail({
     super.key,
@@ -21,11 +20,10 @@ class GiveDetail extends StatefulWidget {
     this.title,
     this.desc,
     this.price,
-    this.sellerId,
+    this.sellerName,
     this.sellerGive,
     this.sellerAsk,
     this.giveId,
-    required this.cartGiveData,
   });
 
   @override
@@ -62,7 +60,7 @@ class _GiveDetailState extends State<GiveDetail> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.sellerId.toString(),
+                  widget.sellerName ?? "unKnown",
                   style: TextStyle(
                     color: AppColors.black,
                     fontSize: 16,
