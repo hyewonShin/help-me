@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
-import 'package:help_me/widget/textfield.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
+import 'package:help_me/util/load_data_from_document.dart';
+import 'package:help_me/util/save_json_to_file.dart';
 
 class AskSubmit extends StatefulWidget {
   const AskSubmit({super.key});
@@ -20,8 +16,41 @@ class _AskSubmitState extends State<AskSubmit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   late final String? _title;
-  late final int? _price;
+  late final String? _price;
   late final String? _desc;
+
+  List<dynamic> askData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      loadData();
+    });
+  }
+
+  Future<void> loadData() async {
+    try {
+      final asks = await loadDataFromDocument("ask.json");
+      setState(() {
+        askData = asks;
+      });
+    } catch (e) {
+      print('데이터 로드 에러: $e');
+    }
+  }
+
+  void addData() async {
+    final newAsk = {
+      "ask_id": askData.length,
+      "user_id": 0,
+      "title": _title,
+      "desc": _desc,
+      "price": _price
+    };
+
+    writeDataToFile(newAsk, "ask.json");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +123,7 @@ class _AskSubmitState extends State<AskSubmit> {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         onSaved: (value) {
                           setState(() {
-                            if (value != null) _price = int.parse(value);
+                            if (value != null) _price = value;
                           });
                         },
                         validator: (String? value) {
@@ -176,7 +205,6 @@ class _AskSubmitState extends State<AskSubmit> {
 
                       if (formKeyState.validate()) {
                         formKeyState.save();
-                        print("$_title, $_price, $_desc");
                       }
                       formKeyState.validate()
                           ? await showCupertinoDialog(
@@ -186,7 +214,6 @@ class _AskSubmitState extends State<AskSubmit> {
                                 actions: [
                                   CupertinoDialogAction(
                                     onPressed: () {
-                                      print("$_title, $_price, $_desc");
                                       Navigator.pop(context);
                                     },
                                     child: const Text(
@@ -196,6 +223,7 @@ class _AskSubmitState extends State<AskSubmit> {
                                   ),
                                   CupertinoDialogAction(
                                     onPressed: () {
+                                      addData();
                                       Navigator.pop(context);
                                       Navigator.pop(context);
                                     },

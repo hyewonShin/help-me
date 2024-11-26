@@ -1,12 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:help_me/widget/textfield.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
 
 class GiveSubmit extends StatefulWidget {
   const GiveSubmit({super.key});
@@ -16,13 +13,20 @@ class GiveSubmit extends StatefulWidget {
 }
 
 class _GiveSubmitState extends State<GiveSubmit> {
-  TextEditingController controllTitle =
+  TextEditingController controlTitle =
       TextEditingController(); //제목 textfield 데이터 받기
-  TextEditingController controllPrice =
+  TextEditingController controlPrice =
       TextEditingController(); //가격 textfield 데이터 받기
-  TextEditingController controllText =
-      TextEditingController(); //상세내용 textfiled 데이터 받기 controllText.text
+  TextEditingController controlText =
+      TextEditingController(); //상세내용 textfield 데이터 받기 controlText.text
   XFile? file;
+  final _formKey = GlobalKey<FormState>();
+  void noPicture(file) {
+    setState(() {
+      file != null;
+    });
+  }
+
   Future<void> getImagePickerData() async {
     final imagePicker = ImagePicker();
     // Future<XFile?>
@@ -35,13 +39,6 @@ class _GiveSubmitState extends State<GiveSubmit> {
     }
     // url, assetPath,
   } //image picker
-
-  // String? isEmpty;
-  // void onSelected(String isEmpty) {
-  //   setState(() {
-  //     isEmpty = "공란";
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +65,9 @@ class _GiveSubmitState extends State<GiveSubmit> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xffCCCCCC))),
+                      border: file != null
+                          ? Border.all(color: Color(0xFFFD7563))
+                          : Border.all(color: Color(0xffCCCCCC))),
                   height: 60,
                   width: 60,
                   child: file != null
@@ -79,24 +78,28 @@ class _GiveSubmitState extends State<GiveSubmit> {
                 ),
               ),
               Expanded(
-                child: ListView(
-                  children: [
-                    const SizedBox(height: 20),
-                    InputInfo(null,
-                        title: '제목',
-                        hinttext: '도와줄 수 있는 내용을 입력해주세요.',
-                        control: controllTitle),
-                    const SizedBox(height: 20),
-                    InputInfo('',
-                        title: '가격',
-                        hinttext: '제공할 재능 이용원의 가격을 적어주세요.',
-                        control: controllPrice),
-                    const SizedBox(height: 20),
-                    InputInfo(null,
-                        title: '상세설명',
-                        hinttext: '제공할 재능의 상세 내용을 적어주세요',
-                        control: controllText),
-                  ],
+                //https://blog.everdu.com/83#3.%20%EB%B2%84%ED%8A%BC%EC%9D%84%20%ED%81%B4%EB%A6%AD%EC%8B%9C%20%EC%9C%A0%ED%9A%A8%EC%84%B1%20%EA%B2%80%EC%82%AC%ED%95%98%EA%B8%B0-1
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    children: [
+                      const SizedBox(height: 20),
+                      InputInfo(null, 1,
+                          title: '제목',
+                          hinttext: '도와줄 수 있는 내용을 입력해주세요.',
+                          control: controlTitle),
+                      const SizedBox(height: 20),
+                      InputInfo('', 1,
+                          title: '가격',
+                          hinttext: '제공할 재능 이용원의 가격을 적어주세요.',
+                          control: controlPrice),
+                      const SizedBox(height: 20),
+                      InputInfo(null, 3,
+                          title: '상세설명',
+                          hinttext: '제공할 재능의 상세 내용을 적어주세요',
+                          control: controlText),
+                    ],
+                  ),
                 ),
               ),
               //TODO GESTUREDETECTOR JSON 파일에 등록
@@ -109,54 +112,63 @@ class _GiveSubmitState extends State<GiveSubmit> {
                 ///TODO WIDGET으로 모듈화
                 child: ElevatedButton(
                   onPressed: () async {
-                    // if (controllTitle != null &&
-                    //     controllPrice != null &&
-                    //     controllText != null)
-                    //TODO null시 빨간색으로 border 변경 함수 설정 후 setstate로 border color 변경 method지정
-                    // if(controllTitle==null){
-                    //   await
-                    // return;
+                    if (_formKey.currentState!.validate()) {}
+                    // if (file == null) {
+                    //   await showCupertinoDialog(
+                    //     context: context,
+                    //     builder: (context) => CupertinoAlertDialog(
+                    //       title: Container(
+                    //           width: 100,
+                    //           height: 100,
+                    //           child: Image.file(File(file!.path))),
+                    //       content: Text('이미지를 입력해주세요.'),
+                    //       actions: [
+                    //         CupertinoDialogAction(
+                    //           onPressed: () {
+                    //             Navigator.pop(context);
+                    //           },
+                    //           child: const Text(
+                    //             "확인",
+                    //             style: TextStyle(color: AppColors.black),
+                    //           ),
+                    //         )
+                    //       ],
+                    //     ),
+                    //   );
                     // }
-                    // if(controllTitle==null){
-                    //   await
-                    // return;
-                    // }
-                    // if(controllTitle==null){
-                    //   await
-                    //return;
-                    // }
-                    await showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                        title: Container(
-                            width: 100,
-                            height: 100,
-                            child: Image.file(File(file!.path))),
-                        content: Text(
-                            '재능기부 등록하시겠습니까?\n제목: ${controllTitle.text}\n가격: ${controllPrice.text}원'),
-                        actions: [
-                          CupertinoDialogAction(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              "뒤로가기",
-                              style: TextStyle(color: AppColors.black),
+                    if (file != null)
+                      await showCupertinoDialog(
+                        context: context,
+                        builder: (context) => CupertinoAlertDialog(
+                          title: Container(
+                              width: 100,
+                              height: 100,
+                              child: Image.file(File(file!.path))),
+                          content: Text(
+                              '재능기부 등록하시겠습니까?\n제목: ${controlTitle.text}\n가격: ${controlPrice.text}원'),
+                          actions: [
+                            CupertinoDialogAction(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                "뒤로가기",
+                                style: TextStyle(color: AppColors.black),
+                              ),
                             ),
-                          ),
-                          CupertinoDialogAction(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              "작성하기",
-                              style: TextStyle(color: AppColors.darkGreen),
+                            CupertinoDialogAction(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                "작성하기",
+                                style: TextStyle(color: AppColors.darkGreen),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
+                          ],
+                        ),
+                      );
                   },
                   child: Text(
                     '작성완료',
@@ -177,72 +189,6 @@ class _GiveSubmitState extends State<GiveSubmit> {
       ),
     );
   }
-
-  ///제목, 상세설명 textfield
-
-  // Widget inputInfo(String title, String details, var control) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(
-  //         '$title',
-  //         style: TextStyle(fontWeight: FontWeight.bold),
-  //       ),
-  //       SizedBox(height: 5),
-  //       Container(
-  //         // height: 100,
-  //         ///ENUM으로 진행 혹은 EXTEND로 상속을 받아서 위젯으로
-  //         child: TextField(
-  //           controller: control,
-  //           // expands: true,
-  //           // maxLines: null,
-  //           // minLines: null,
-  //           style: TextStyle(fontSize: 16),
-  //           decoration: InputDecoration(
-  //             hintText: ('$details'),
-  //             hintStyle: TextStyle(
-  //                 color: AppColors.lightGray, fontWeight: FontWeight.bold),
-  //             border: OutlineInputBorder(), //외곽선
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  ///가격 textfield
-  // Widget inputNumInfo(String title, String details, var control) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(
-  //         '$title',
-  //         style: TextStyle(fontWeight: FontWeight.bold),
-  //       ),
-  //       SizedBox(height: 5),
-  //       Container(
-  //         // height: 100,
-  //         child: TextField(
-  //           controller: control,
-  //           keyboardType: TextInputType.numberWithOptions(), //숫자용 키패드
-  //           inputFormatters: [
-  //             FilteringTextInputFormatter.digitsOnly
-  //           ], // 숫자만 입력가능
-  //           // expands: true,
-  //           // maxLines: null,
-  //           // minLines: null,
-  //           style: TextStyle(fontSize: 16),
-  //           decoration: InputDecoration(
-  //             hintText: '$details',
-  //             hintStyle: TextStyle(
-  //                 color: AppColors.lightGray, fontWeight: FontWeight.bold),
-  //             border: OutlineInputBorder(), //외곽선
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 }
 
 //shared_preferences -핸드폰내부로 저장 할 수 있도록

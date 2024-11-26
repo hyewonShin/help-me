@@ -8,8 +8,9 @@ class InputInfo extends StatefulWidget {
   String title; //제목 ex. title: "제목을 입력해주세요."
   String hinttext; //힌트 택스트 문자 ex. hinttext: "힌트를 입력해주세요."
   var control; //TextEditingController ex. control: controllTitle(변수 정의!)
+  int? maxLines; // maxline수(줄 개수)
 
-  InputInfo(this.textInputType,
+  InputInfo(this.textInputType, this.maxLines,
       {required this.title, required this.hinttext, this.control});
 
   @override
@@ -29,8 +30,9 @@ class _InputInfoState extends State<InputInfo> {
         SizedBox(height: 5),
         Container(
           // height: 100,
-          ///ENUM으로 진행 혹은 EXTEND로 상속을 받아서 위젯으로
-          child: TextField(
+
+          child: TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: widget.control,
             keyboardType: widget.textInputType == null
                 ? null
@@ -42,61 +44,37 @@ class _InputInfoState extends State<InputInfo> {
                       locale: 'ko',
                       decimalDigits: 0,
                       symbol: '',
-                    ),
+                    ), //https://pub.dev/packages/currency_text_input_formatter
                   ],
-
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "필수사항을 입력해주세요.";
+              }
+              return null;
+            },
             // expands: true,
-            // maxLines: null,
+            maxLines: widget.maxLines,
             // minLines: null,
             style: TextStyle(fontSize: 16),
             decoration: InputDecoration(
+              errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFFFD7563))),
               hintText: ('${widget.hinttext}'),
               hintStyle: TextStyle(
                   color: AppColors.lightGray, fontWeight: FontWeight.bold),
               border: OutlineInputBorder(
                   borderSide: BorderSide()), //color: Color borderColor//외곽선
             ),
-            onChanged: (value) {
-              setState(() {
-                Color borderColor =
-                    value.isNotEmpty ? AppColors.black : Color(0xFFFD7563);
-              });
-            },
+            // onChanged: (value) {
+            //   setState(() {
+            //     Color borderColor =
+            //         value.isNotEmpty ? AppColors.black : Color(0xFFFD7563);
+            //   });
+            // },
           ),
         ),
       ],
     );
     ;
   }
-}
-
-Widget inputNumInfo(String title, String details, var control) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        '$title',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      SizedBox(height: 5),
-      Container(
-        // height: 100,
-        child: TextField(
-          controller: control,
-          keyboardType: TextInputType.numberWithOptions(), //숫자용 키패드
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly], // 숫자만 입력가능
-          // expands: true,
-          maxLines: 3,
-          // minLines: null,
-          style: TextStyle(fontSize: 16),
-          decoration: InputDecoration(
-            hintText: '$details',
-            hintStyle: TextStyle(
-                color: AppColors.lightGray, fontWeight: FontWeight.bold),
-            border: OutlineInputBorder(), //외곽선
-          ),
-        ),
-      ),
-    ],
-  );
 }
