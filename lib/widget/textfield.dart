@@ -9,9 +9,16 @@ class InputInfo extends StatefulWidget {
   String hinttext; //힌트 택스트 문자 ex. hinttext: "힌트를 입력해주세요."
   String? data; //데이터 담는곳
   int? maxLines; // maxline수(줄 개수)
+  Function changeValue;
 
-  InputInfo(this.textInputType, this.maxLines,
-      {required this.title, required this.hinttext, this.data});
+  InputInfo(
+    this.textInputType,
+    this.maxLines, {
+    required this.title,
+    required this.hinttext,
+    this.data,
+    required this.changeValue,
+  });
 
   @override
   State<InputInfo> createState() => _InputInfoState();
@@ -26,7 +33,7 @@ class _InputInfoState extends State<InputInfo> {
       children: [
         Text(
           '${widget.title}',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         SizedBox(height: 5),
         Container(
@@ -35,9 +42,7 @@ class _InputInfoState extends State<InputInfo> {
           child: TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             onSaved: (value) {
-              setState(() {
-                data = widget.data;
-              });
+              widget.changeValue(value, widget.title);
             },
             keyboardType: widget.textInputType == null
                 ? null
@@ -68,7 +73,15 @@ class _InputInfoState extends State<InputInfo> {
               hintStyle: TextStyle(
                   color: AppColors.lightGray, fontWeight: FontWeight.bold),
               border: OutlineInputBorder(
-                  borderSide: BorderSide()), //color: Color borderColor//외곽선
+                borderSide: BorderSide(color: AppColors.lightGray),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: AppColors.lightGreen,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ), //color: Color borderColor//외곽선
             ),
           ),
         ),
