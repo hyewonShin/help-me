@@ -138,7 +138,7 @@ class _GiveScreenState extends State<GiveScreen> {
                                   desc: item['desc'],
                                   price: item['price'] ?? 0,
                                   sellerGive: _sellerData[0]['give'].length,
-                                  sellerAsk: _sellerData[0]['ask'].length,
+                                  sellerAsk: _askData.length,
                                   giveId: item['give_id'],
                                 );
                               }),
