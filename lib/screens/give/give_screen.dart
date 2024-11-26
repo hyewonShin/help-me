@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:help_me/screens/give/give_detail.dart';
 import 'package:help_me/screens/give/give_submit.dart';
+import 'package:help_me/util/load_data_from_document.dart';
 import 'package:intl/intl.dart';
 
 class GiveScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _GiveScreenState extends State<GiveScreen> {
   final userJsonUrl = "lib/mock_data/users.json";
   List<dynamic> _giveData = [];
   List<dynamic> _sellerData = [];
-  List<dynamic> userGiveList = []; // 내가 담은 재능 리스트
+  List<dynamic> _askData = [];
 
   final USER_ID = 0; //현재 로그인한 사용자의 user_id 임의로 지정해둠
 
@@ -32,13 +33,14 @@ class _GiveScreenState extends State<GiveScreen> {
   @override
   void initState() {
     super.initState();
-    _loadData(giveJsonUrl);
+    _loadGiveData();
+    _loadSellerData();
+    _loadAskData();
   }
 
-  Future<void> _loadData(url) async {
+  Future<void> _loadGiveData() async {
     try {
-      final String response = await rootBundle.loadString(url);
-      final data = json.decode(response);
+      final data = await loadDataFromDocument("give.json");
       setState(() {
         _giveData = data;
       });
@@ -47,23 +49,34 @@ class _GiveScreenState extends State<GiveScreen> {
     }
   }
 
-  Future<void> _loadAndFindSellerData(url, sellerId) async {
+  Future<void> _loadSellerData() async {
     try {
-      final String response = await rootBundle.loadString(url);
-      final data = json.decode(response);
+      final data = await loadDataFromDocument("users.json");
 
-      final filterData =
-          data.where((item) => item['user_id'] == sellerId).toList();
+      // final filterData =
+      //     data.where((item) => item['user_id'] == sellerId).toList();
 
       setState(() {
-        _sellerData = filterData;
+        _sellerData = data;
       });
     } catch (e) {
       print('error: $e');
     }
   }
 
-  void submitGiveData({
+  Future<void> _loadAskData() async {
+    try {
+      final data = await loadDataFromDocument("ask.json");
+
+      setState(() {
+        _askData = data;
+      });
+    } catch (e) {
+      print('error: $e');
+    }
+  }
+
+  void submitAskData({
     image,
     title,
     price,
@@ -114,8 +127,7 @@ class _GiveScreenState extends State<GiveScreen> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            _loadAndFindSellerData(
-                                userJsonUrl, item['user_id']);
+                            // _loadAndFindSellerData(item['user_id']);
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) {
