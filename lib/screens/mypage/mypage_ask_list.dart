@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:help_me/util/load_data_from_document.dart';
 import 'package:help_me/util/save_json_to_file.dart';
+import 'package:intl/intl.dart';
 
 class MypageAskList extends StatefulWidget {
   final int userLoginId;
@@ -82,13 +83,11 @@ class _MypageAskListState extends State<MypageAskList> {
               }),
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        addStateAndData();
-      }),
     );
   }
 
   Container buildContainerList(int index) {
+    final comma = NumberFormat("#,###,###원");
     //index를 파라미터로 받아 Container를 생성하는 함수
     Map ask = askData[index];
     return Container(
@@ -103,11 +102,29 @@ class _MypageAskListState extends State<MypageAskList> {
         ),
       )),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(ask["title"]),
-          Text(ask["name"]),
-          Text(ask["ask_id"].toString()),
-          Text(ask["price"].toString()),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                ask["title"],
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              Text(ask["name"],
+                  style: TextStyle(fontSize: 16.0, color: AppColors.darkGray)),
+              Text("사례금 ${comma.format(ask["price"])}",
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.lightGreen)),
+            ],
+          ),
+          Icon(Icons.close)
         ],
       ),
     );
