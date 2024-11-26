@@ -3,6 +3,7 @@ import 'data_service.dart';
 import 'models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:help_me/util/load_data_from_document.dart';
+import 'package:help_me/util/delete_usersgive_to_document.dart';
 
 class MypageGiveList extends StatefulWidget {
   const MypageGiveList({super.key});
@@ -63,12 +64,23 @@ class _MypageGiveListState extends State<MypageGiveList> {
               decoration: const BoxDecoration(
                 color: Colors.white,
               ),
-              child: ListView.builder(
-                itemCount: giveIdList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return buildContainerList(index); // giveList[index] 사용
-                },
-              ),
+              child: giveIdList.isEmpty
+                  ? const Center(
+                      child: Text(
+                        '장바구니에 담은 내역이 없습니다.',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: giveIdList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return buildContainerList(index); // giveList[index] 사용
+                      },
+                    ),
             ),
             Container(
               width: 370,
@@ -199,11 +211,20 @@ class _MypageGiveListState extends State<MypageGiveList> {
                           ),
                         ),
                         const Spacer(),
-                        const Icon(Icons.close),
+                        GestureDetector(
+                            onTap: () async {
+                              await deleteGiveEntry(
+                                  userLoginId, giveIdList[index]);
+                              // 데이터 재로드
+                              await loadData(); // 데이터를 다시 불러옵니다.
+                              // 상태 갱신
+                              setState(() {});
+                            },
+                            child: Icon(Icons.close)),
                       ],
                     ),
                     Text(
-                      '$userName', // ***
+                      '$userName',
                       style: const TextStyle(
                         color: Color(0xFF9E9E9E),
                         fontSize: 14,
@@ -237,7 +258,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                                 ),
                               ),
                               Text(
-                                '$quantity', //***
+                                '$quantity',
                                 style: TextStyle(
                                   color: Color(0xFF44D596),
                                   fontSize: 20,

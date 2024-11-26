@@ -160,10 +160,15 @@ class _MypageScreenState extends State<MypageScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return MypageGiveList();
-                        }));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MypageGiveList(),
+                          ),
+                        ).then((_) {
+                          // 다른 페이지(MypageGiveList)에서 돌아온 후 데이터 로드
+                          loadData();
+                        });
                       },
                       child: const Row(
                         children: [

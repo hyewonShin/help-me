@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:help_me/util/udate_quantity_to_document.dart';
 import 'models.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart'; // path_provider 임포트
+import 'package:help_me/util/load_data_from_document.dart';
 
 class DataService {
   //json 파일 로드하여 models의 class로 변환
@@ -127,12 +129,14 @@ class DataService {
       orElse: () => {'give_id': giveId, 'quantity': 0}, // 기본값 반환
     );
 
+    // int result = giveItem['quantity'];
     // 수량 조정
     if (plus) {
       giveItem['quantity'] += 1;
     } else if (giveItem['quantity'] > 0) {
       giveItem['quantity'] -= 1;
     }
+    updateQuantity(userLoginId, giveId, giveItem['quantity']);
 
     //   // 수정된 usersList를 JSON으로 변환
     //   final updatedJsonString =
