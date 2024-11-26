@@ -14,17 +14,24 @@ Future<void> updateQuantity(int userId, int giveId, int newQuantity) async {
 
     // 해당 user_id와 give_id를 가진 데이터 찾기
     bool isUpdated = false;
+    bool giveFound = false;
     for (var user in existingData) {
       if (user['user_id'] == userId) {
         for (var give in user['give']) {
           if (give['give_id'] == giveId) {
             give['quantity'] = newQuantity;
             isUpdated = true;
+            giveFound = true;
             break;
           }
         }
+        // 해당 give_id가 없는 경우, List에 추가
+        if (!giveFound) {
+          user['give'].add({"give_id": giveId, "quantity": newQuantity});
+          isUpdated = true;
+          break;
+        }
       }
-      if (isUpdated) break;
     }
 
     if (!isUpdated) {
