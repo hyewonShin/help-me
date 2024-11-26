@@ -34,7 +34,6 @@ flutter:
     - lib/mock_data/ask.json
     - lib/mock_data/give.json
     - lib/mock_data/users.json
-    - assets/images/
 
   fonts:
     - family: Pretendard
