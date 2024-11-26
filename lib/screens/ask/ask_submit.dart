@@ -102,14 +102,16 @@ class _AskSubmitState extends State<AskSubmit> {
                             borderSide: BorderSide(
                               color: AppColors.lightGreen,
                             ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           hintText: ('도움을 요청할 내용의 제목을 적어주세요.'),
                           hintStyle: TextStyle(
                               color: AppColors.lightGray,
                               fontWeight: FontWeight.bold),
                           border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide()), //color: Color borderColor//외곽선
+                            borderSide: BorderSide(color: AppColors.lightGray),
+                            borderRadius: BorderRadius.circular(10),
+                          ), //color: Color borderColor//외곽선
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -138,14 +140,16 @@ class _AskSubmitState extends State<AskSubmit> {
                             borderSide: BorderSide(
                               color: AppColors.lightGreen,
                             ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           hintText: ('도움 받게되면 제공할 사례금을 적어주세요.'),
                           hintStyle: TextStyle(
                               color: AppColors.lightGray,
                               fontWeight: FontWeight.bold),
                           border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide()), //color: Color borderColor//외곽선
+                            borderSide: BorderSide(color: AppColors.lightGray),
+                            borderRadius: BorderRadius.circular(10),
+                          ), //color: Color borderColor//외곽선
                         ),
                         inputFormatters: [
                           CurrencyTextInputFormatter.currency(
@@ -183,14 +187,16 @@ class _AskSubmitState extends State<AskSubmit> {
                             borderSide: BorderSide(
                               color: AppColors.lightGreen,
                             ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           hintText: ('도움을 요청할 내용을 적어주세요.'),
                           hintStyle: TextStyle(
                               color: AppColors.lightGray,
                               fontWeight: FontWeight.bold),
                           border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide()), //color: Color borderColor//외곽선
+                            borderSide: BorderSide(color: AppColors.lightGray),
+                            borderRadius: BorderRadius.circular(10),
+                          ), //color: Color borderColor//외곽선
                         ),
                       ),
                     ],
