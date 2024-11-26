@@ -83,19 +83,6 @@ class _GiveScreenState extends State<GiveScreen> {
     });
   }
 
-  void cartGiveData(giveId) async {
-    final String response = await rootBundle.loadString(userJsonUrl);
-    final data = json.decode(response);
-
-    final user = data.where((item) => item['user_id'] == USER_ID).toList();
-
-    List giveList = user[0]['give'];
-
-    setState(() {
-      userGiveList = {...userGiveList, ...giveList, giveId}.toList();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,7 +128,6 @@ class _GiveScreenState extends State<GiveScreen> {
                                   sellerGive: _sellerData[0]['give'].length,
                                   sellerAsk: _sellerData[0]['ask'].length,
                                   giveId: item['give_id'],
-                                  cartGiveData: cartGiveData,
                                 );
                               }),
                             );

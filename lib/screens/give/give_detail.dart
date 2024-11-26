@@ -13,7 +13,6 @@ class GiveDetail extends StatefulWidget {
   final String? desc;
   final int? price;
   final int? giveId;
-  final Function cartGiveData;
 
   const GiveDetail({
     super.key,
@@ -25,7 +24,6 @@ class GiveDetail extends StatefulWidget {
     this.sellerGive,
     this.sellerAsk,
     this.giveId,
-    required this.cartGiveData,
   });
 
   @override
