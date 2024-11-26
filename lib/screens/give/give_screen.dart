@@ -117,7 +117,7 @@ class _GiveScreenState extends State<GiveScreen> {
                 child: ListView.builder(
                   itemCount: _giveData.length,
                   itemBuilder: (context, index) {
-                    final item = _giveData[index];
+                    final item = _giveData.reversed.toList()[index];
                     return Column(
                       children: [
                         GestureDetector(

@@ -6,8 +6,9 @@ import 'package:help_me/util/load_data_from_document.dart';
 import 'package:help_me/util/save_json_to_file.dart';
 
 class AskSubmit extends StatefulWidget {
-  const AskSubmit({super.key});
+  AskSubmit({required this.addAskData, super.key});
 
+  Function addAskData;
   @override
   State<AskSubmit> createState() => _AskSubmitState();
 }
@@ -46,9 +47,9 @@ class _AskSubmitState extends State<AskSubmit> {
       "user_id": 0,
       "title": _title,
       "desc": _desc,
-      "price": _price
+      "price": int.parse(_price!.replaceAll(",", ""))
     };
-
+    widget.addAskData(newAsk);
     writeDataToFile(newAsk, "ask.json");
   }
 
