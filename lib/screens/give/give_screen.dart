@@ -111,79 +111,90 @@ class _GiveScreenState extends State<GiveScreen> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: _giveData.length,
-                  itemBuilder: (context, index) {
-                    final item = _giveData[index];
-                    return Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return GiveDetail(
-                                  image: item['image'],
-                                  sellerName: item['seller_name'],
-                                  title: item['title'],
-                                  desc: item['desc'],
-                                  price: item['price'] ?? 0,
-                                  sellerGive: item['seller_give'],
-                                  sellerAsk: item['seller_ask'],
-                                  giveId: item['give_id'],
-                                );
-                              }),
-                            );
-                          },
-                          child: ListTile(
-                            title: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: Image.network(item['image'],
-                                        width: 111,
-                                        height: 113,
-                                        fit: BoxFit.cover),
+                child: _giveData.isEmpty
+                    ? Center(
+                        child: Text(
+                        "상품이 없습니다",
+                        style: TextStyle(fontSize: 20),
+                      ))
+                    : ListView.builder(
+                        itemCount: _giveData.length,
+                        itemBuilder: (context, index) {
+                          final item = _giveData[index];
+
+                          return Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return GiveDetail(
+                                        image: item['image'],
+                                        sellerName: item['seller_name'],
+                                        title: item['title'],
+                                        desc: item['desc'],
+                                        price: item['price'] ?? 0,
+                                        sellerGive: item['seller_give'],
+                                        sellerAsk: item['seller_ask'],
+                                        giveId: item['give_id'],
+                                      );
+                                    }),
+                                  );
+                                },
+                                child: ListTile(
+                                  title: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          child: Image.network(item['image'],
+                                              width: 111,
+                                              height: 113,
+                                              fit: BoxFit.cover),
+                                        ),
+                                        SizedBox(
+                                          width: 13,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              item['title'],
+                                              style: TextStyle(
+                                                  color: AppColors.black),
+                                            ),
+                                            Text(
+                                              item['seller_name'],
+                                              style: TextStyle(
+                                                  color: AppColors.darkGray),
+                                            ),
+                                            Text(comma.format(item['price']),
+                                                style: TextStyle(
+                                                    color: AppColors.darkGreen,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  SizedBox(
-                                    width: 13,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item['title'],
-                                        style:
-                                            TextStyle(color: AppColors.black),
-                                      ),
-                                      Text(
-                                        item['seller_name'],
-                                        style: TextStyle(
-                                            color: AppColors.darkGray),
-                                      ),
-                                      Text(comma.format(item['price']),
-                                          style: TextStyle(
-                                              color: AppColors.darkGreen,
-                                              fontWeight: FontWeight.bold)),
-                                    ],
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 1.0,
-                          color: AppColors.lightGray,
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                              Container(
+                                height: 1.0,
+                                color: AppColors.lightGray,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
               ),
             ],
           ),
