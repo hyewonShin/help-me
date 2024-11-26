@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:help_me/screens/ask/ask_detail.dart';
 import 'package:help_me/screens/ask/ask_submit.dart';
+import 'package:help_me/util/load_data_from_document.dart';
 
 String wonCurrency(int price) {
   return "${price.toString().replaceAllMapped(
@@ -28,14 +29,13 @@ class _AskScreenState extends State<AskScreen> {
   @override
   void initState() {
     super.initState();
-    _loadData(askJsonUrl, isAskData: true);
-    _loadData(usersJsonUrl, isAskData: false);
+    _loadData("ask.json", isAskData: true);
+    _loadData("users.json", isAskData: false);
   }
 
-  Future<void> _loadData(String url, {required bool isAskData}) async {
+  Future<void> _loadData(String fileName, {required bool isAskData}) async {
     try {
-      final String response = await rootBundle.loadString(url);
-      final data = json.decode(response);
+      final data = await loadDataFromDocument(fileName);
       setState(() {
         if (isAskData) {
           _askData = data;
@@ -71,6 +71,12 @@ class _AskScreenState extends State<AskScreen> {
     return askCount;
   }
 
+  void addAskData(newData) {
+    setState(() {
+      _askData.add(newData);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final askCount = countUserData(_askData);
@@ -98,7 +104,7 @@ class _AskScreenState extends State<AskScreen> {
               child: ListView.builder(
                   itemCount: _askData.length,
                   itemBuilder: (context, index) {
-                    final item = _askData[index];
+                    final item = _askData.reversed.toList()[index];
                     final userData = _usersData.firstWhere(
                       (user) => user['user_id'] == item['user_id'],
                       orElse: () => null,
@@ -166,7 +172,7 @@ class _AskScreenState extends State<AskScreen> {
             heroTag: "2",
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return AskSubmit();
+                return AskSubmit(addAskData: addAskData);
                 // return GiveSubmit(submitGiveData: submitGiveData);  // 진용님 => give_submit에서 submitGiveData() 테스트시 사용하시면 됩니다
               }));
             },

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:help_me/constant/colors.dart';
 import 'package:help_me/screens/ask/ask_screen.dart';
 import 'package:help_me/screens/give/give_screen.dart';
 
@@ -19,12 +21,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Help_me',
       theme: ThemeData(
-        fontFamily: "Pretendard",
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+          fontFamily: "Pretendard",
+          scaffoldBackgroundColor: AppColors.white,
+          appBarTheme: AppBarTheme(color: AppColors.white),
+          bottomNavigationBarTheme:
+              BottomNavigationBarThemeData(backgroundColor: AppColors.white)),
       home: const MyHomePage(),
     );
   }
@@ -45,8 +48,18 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(title[_selectedIndex]),
-          centerTitle: true,
+          scrolledUnderElevation: 0,
+          title: Row(
+            children: [
+              SizedBox(
+                width: 10,
+              ),
+              SvgPicture.asset(
+                "assets/images/logo.svg",
+                fit: BoxFit.cover,
+              )
+            ],
+          ),
         ),
         body: IndexedStack(index: _selectedIndex, children: [
           GiveScreen(),
@@ -54,6 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
           MypageScreen(),
         ]),
         bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: AppColors.lightGreen,
+          unselectedItemColor: AppColors.darkGray,
           currentIndex: _selectedIndex,
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.list), label: '재능기부'),

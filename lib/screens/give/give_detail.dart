@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -54,8 +56,11 @@ class _GiveDetailState extends State<GiveDetail> {
       body: Stack(children: [
         Column(
           children: [
-            Image.network(widget.image!,
-                width: double.infinity, height: 409, fit: BoxFit.cover),
+            widget.image!.substring(0, 5) == "https"
+                ? Image.network(widget.image!,
+                    width: double.infinity, height: 409, fit: BoxFit.cover)
+                : Image.file(File(widget.image!),
+                    width: double.infinity, height: 409, fit: BoxFit.cover),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
