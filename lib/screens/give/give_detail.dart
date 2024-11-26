@@ -50,97 +50,104 @@ class _GiveDetailState extends State<GiveDetail> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(),
-      body: Column(
-        children: [
-          Image.network(widget.image!,
-              width: double.infinity, height: 409, fit: BoxFit.cover),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.sellerName ?? "unKnown",
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+      body: Stack(children: [
+        Column(
+          children: [
+            Image.network(widget.image!,
+                width: double.infinity, height: 409, fit: BoxFit.cover),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.sellerName ?? "unKnown",
+                    style: TextStyle(
+                      color: AppColors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-                Row(
-                  children: [
-                    Text('재능 담기  ',
+                  Row(
+                    children: [
+                      Text('재능 담기  ',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.darkGray)),
+                      Text(
+                        '${widget.sellerGive}회',
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.darkGray)),
-                    Text(
-                      '${widget.sellerGive}회',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.lightGreen),
+                            color: AppColors.lightGreen),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 1,
+                          height: 17,
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                      Text('재능 요청  ',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.darkGray)),
+                      Text(
+                        '${widget.sellerAsk}회',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.lightGreen),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Container(
+                      height: 1,
+                      color: AppColors.lightGray,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 1,
-                        height: 17,
-                        color: Colors.grey[400],
+                  ),
+                  Text(
+                    '${widget.title}',
+                    style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    height: 110,
+                    child: SingleChildScrollView(
+                      child: Text(
+                        '${widget.desc}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.black,
+                        ),
                       ),
                     ),
-                    Text('재능 요청  ',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.darkGray)),
-                    Text(
-                      '${widget.sellerAsk}회',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.lightGreen),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Container(
-                    height: 1,
-                    color: AppColors.lightGray,
-                  ),
-                ),
-                Text(
-                  '${widget.title}',
-                  style: TextStyle(
-                      color: AppColors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  height: 110,
-                  child: Text(
-                    '${widget.desc}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.black,
-                    ),
-                  ),
-                ),
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Container(
-              height: 1,
-              color: AppColors.lightGray,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Container(
+                height: 1,
+                color: AppColors.lightGray,
+              ),
             ),
-          ),
-          Row(children: [
+          ],
+        ),
+        Positioned(
+          bottom: 30,
+          child: Row(children: [
             SizedBox(
               width: 10,
             ),
@@ -199,58 +206,60 @@ class _GiveDetailState extends State<GiveDetail> {
                 ),
               ],
             ),
-            SizedBox(
-              width: 135,
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  showCupertinoDialog(
-                      context: context,
-                      builder: (context) => CupertinoAlertDialog(
-                              title: Text(
-                                  '$productName 이용권 $quantity개를 구매하시겠습니까?'),
-                              actions: [
-                                CupertinoDialogAction(
-                                  child: Text('취소'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                CupertinoDialogAction(
-                                  child: Text('확인'),
-                                  onPressed: () {
-                                    showCupertinoDialog(
-                                        context: context,
-                                        builder: (context) =>
-                                            CupertinoAlertDialog(
-                                              title: Text('구매 완료'),
-                                              actions: [
-                                                CupertinoDialogAction(
-                                                  child: Text('확인'),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                )
-                                              ],
-                                            ));
-                                  },
-                                ),
-                              ]));
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.lightGreen,
-                    foregroundColor: AppColors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    minimumSize: Size(82, 45)),
-                child: Text(
-                  '구매하기',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
-                )),
           ]),
-        ],
-      ),
+        ),
+        Positioned(
+          bottom: 35,
+          left: 300,
+          right: 20,
+          child: ElevatedButton(
+              onPressed: () {
+                showCupertinoDialog(
+                    context: context,
+                    builder: (context) => CupertinoAlertDialog(
+                            title:
+                                Text('$productName 이용권 $quantity개를 구매하시겠습니까?'),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: Text('취소'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              CupertinoDialogAction(
+                                child: Text('확인'),
+                                onPressed: () {
+                                  showCupertinoDialog(
+                                      context: context,
+                                      builder: (context) =>
+                                          CupertinoAlertDialog(
+                                            title: Text('구매 완료'),
+                                            actions: [
+                                              CupertinoDialogAction(
+                                                child: Text('확인'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  Navigator.of(context).pop();
+                                                },
+                                              )
+                                            ],
+                                          ));
+                                },
+                              ),
+                            ]));
+              },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.lightGreen,
+                  foregroundColor: AppColors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  minimumSize: Size(82, 45)),
+              child: Text(
+                '구매하기',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+              )),
+        ),
+      ]),
     );
   }
 }
