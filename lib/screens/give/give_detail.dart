@@ -152,10 +152,27 @@ class _GiveDetailState extends State<GiveDetail> {
             SizedBox(
               width: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: SvgPicture.asset(
-                'assets/images/cart.svg',
+            GestureDetector(
+              onTap: () {
+                showCupertinoDialog(
+                    context: context,
+                    builder: (context) => CupertinoAlertDialog(
+                          title: Text('장바구니에 담겼습니다'),
+                          actions: [
+                            CupertinoDialogAction(
+                              child: Text('확인'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        ));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: SvgPicture.asset(
+                  'assets/images/cart.svg',
+                ),
               ),
             ),
             Container(
