@@ -7,17 +7,18 @@ class InputInfo extends StatefulWidget {
   String? textInputType; // 입력 및 키보드 타입 null=문자, !null=숫자
   String title; //제목 ex. title: "제목을 입력해주세요."
   String hinttext; //힌트 택스트 문자 ex. hinttext: "힌트를 입력해주세요."
-  var control; //TextEditingController ex. control: controllTitle(변수 정의!)
+  String? data; //데이터 담는곳
   int? maxLines; // maxline수(줄 개수)
 
   InputInfo(this.textInputType, this.maxLines,
-      {required this.title, required this.hinttext, this.control});
+      {required this.title, required this.hinttext, this.data});
 
   @override
   State<InputInfo> createState() => _InputInfoState();
 }
 
 class _InputInfoState extends State<InputInfo> {
+  String? data; //데이터 담는곳
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,7 +34,11 @@ class _InputInfoState extends State<InputInfo> {
 
           child: TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            controller: widget.control,
+            onSaved: (value) {
+              setState(() {
+                data = widget.data;
+              });
+            },
             keyboardType: widget.textInputType == null
                 ? null
                 : TextInputType.numberWithOptions(), //숫자용 키패드
@@ -65,12 +70,6 @@ class _InputInfoState extends State<InputInfo> {
               border: OutlineInputBorder(
                   borderSide: BorderSide()), //color: Color borderColor//외곽선
             ),
-            // onChanged: (value) {
-            //   setState(() {
-            //     Color borderColor =
-            //         value.isNotEmpty ? AppColors.black : Color(0xFFFD7563);
-            //   });
-            // },
           ),
         ),
       ],

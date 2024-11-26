@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:help_me/widget/textfield.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:help_me/util/load_data_from_document.dart';
+import 'package:help_me/util/save_json_to_file.dart';
 
 class GiveSubmit extends StatefulWidget {
   const GiveSubmit({super.key});
@@ -13,23 +15,47 @@ class GiveSubmit extends StatefulWidget {
 }
 
 class _GiveSubmitState extends State<GiveSubmit> {
-  TextEditingController controlTitle =
-      TextEditingController(); //제목 textfield 데이터 받기
-  TextEditingController controlPrice =
-      TextEditingController(); //가격 textfield 데이터 받기
-  TextEditingController controlText =
-      TextEditingController(); //상세내용 textfield 데이터 받기 controlText.text
+  late final String? _title = '';
+  String? _price;
+  String? _desc;
   XFile? file;
+  List<dynamic> giveData = [];
+  List<dynamic> newGive = [];
   final _formKey = GlobalKey<FormState>();
-  void noPicture(file) {
+  void initState() {
+    super.initState();
     setState(() {
-      file != null;
+      loadData();
     });
+  }
+
+  Future<void> loadData() async {
+    try {
+      final gives = await loadDataFromDocument("give.json");
+      setState(() {
+        giveData = gives;
+      });
+    } catch (e) {
+      print('데이터 로드 에러: $e');
+    }
+  }
+
+  void addData() async {
+    final newGive = {
+      "ask_id": giveData.length,
+      "user_id": 0,
+      "image": Image.file(File(file!.path)),
+      "title": _title,
+      "desc": _desc,
+      "price": _price
+    };
+
+    writeDataToFile(newGive, ".json");
   }
 
   Future<void> getImagePickerData() async {
     final imagePicker = ImagePicker();
-    // Future<XFile?>
+
     final XFile? xFile =
         await imagePicker.pickImage(source: ImageSource.gallery);
     if (xFile != null) {
@@ -65,9 +91,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                      border: file != null
-                          ? Border.all(color: Color(0xFFFD7563))
-                          : Border.all(color: Color(0xffCCCCCC))),
+                      border: Border.all(color: Color(0xffCCCCCC))),
                   height: 60,
                   width: 60,
                   child: file != null
@@ -87,56 +111,31 @@ class _GiveSubmitState extends State<GiveSubmit> {
                       InputInfo(null, 1,
                           title: '제목',
                           hinttext: '도와줄 수 있는 내용을 입력해주세요.',
-                          control: controlTitle),
+                          data: _title),
                       const SizedBox(height: 20),
                       InputInfo('', 1,
                           title: '가격',
                           hinttext: '제공할 재능 이용원의 가격을 적어주세요.',
-                          control: controlPrice),
+                          data: _price),
                       const SizedBox(height: 20),
                       InputInfo(null, 3,
                           title: '상세설명',
                           hinttext: '제공할 재능의 상세 내용을 적어주세요',
-                          control: controlText),
+                          data: _desc),
                     ],
                   ),
                 ),
               ),
-              //TODO GESTUREDETECTOR JSON 파일에 등록
-              //give screen 데이터 호출 및 상태 등록
-              // 그 상태를 add 하여 변경
               Center(
                   child: Container(
                 width: double.infinity,
-
-                ///TODO WIDGET으로 모듈화
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {}
-                    // if (file == null) {
-                    //   await showCupertinoDialog(
-                    //     context: context,
-                    //     builder: (context) => CupertinoAlertDialog(
-                    //       title: Container(
-                    //           width: 100,
-                    //           height: 100,
-                    //           child: Image.file(File(file!.path))),
-                    //       content: Text('이미지를 입력해주세요.'),
-                    //       actions: [
-                    //         CupertinoDialogAction(
-                    //           onPressed: () {
-                    //             Navigator.pop(context);
-                    //           },
-                    //           child: const Text(
-                    //             "확인",
-                    //             style: TextStyle(color: AppColors.black),
-                    //           ),
-                    //         )
-                    //       ],
-                    //     ),
-                    //   );
-                    // }
-                    if (file != null)
+                    final formKeyState = _formKey.currentState!;
+                    if (formKeyState.validate()) {
+                      formKeyState.save();
+                    }
+                    if (file != null) {
                       await showCupertinoDialog(
                         context: context,
                         builder: (context) => CupertinoAlertDialog(
@@ -145,7 +144,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
                               height: 100,
                               child: Image.file(File(file!.path))),
                           content: Text(
-                              '재능기부 등록하시겠습니까?\n제목: ${controlTitle.text}\n가격: ${controlPrice.text}원'),
+                              '재능기부 등록하시겠습니까?\n제목: ${_title}\n가격: ${_price}원'),
                           actions: [
                             CupertinoDialogAction(
                               onPressed: () {
@@ -169,6 +168,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
                           ],
                         ),
                       );
+                    }
                   },
                   child: Text(
                     '작성완료',
@@ -190,10 +190,3 @@ class _GiveSubmitState extends State<GiveSubmit> {
     );
   }
 }
-
-//shared_preferences -핸드폰내부로 저장 할 수 있도록
-//json decode return map key dynamic rpg 게임에서 파일 저장하도록
-//상태관리 data어떻게 불러 와서 어떻게&어디서(목록위치) 관리할지? 문의→ 신혜원님
-// 등록하기에서 json 바로 수정하면 홈페이지 동기화 반영이 안됨.(새로고침, 데이터 동기화 되게 구조를 짜거나?)
-
-//json place holder json 형식들 정리되어있음.
