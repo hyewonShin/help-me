@@ -196,6 +196,24 @@ class _GiveSubmitState extends State<GiveSubmit> {
                               ),
                             )
                           : null;
+                    } else {
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (context) => CupertinoAlertDialog(
+                          content: Text('사진을 등록해주세요.'),
+                          actions: [
+                            CupertinoDialogAction(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                "뒤로가기",
+                                style: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
                     }
                   },
                   child: Text(
