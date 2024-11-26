@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:help_me/util/save_json_to_file.dart';
+import 'package:help_me/util/udate_quantity_to_document.dart';
 import 'package:intl/intl.dart';
 
 class GiveDetail extends StatefulWidget {
@@ -34,10 +35,11 @@ class GiveDetail extends StatefulWidget {
 }
 
 class _GiveDetailState extends State<GiveDetail> {
+  int userLoginId = 0; // 로그인한 사용자 ID
   int quantity = 1;
   int totalPrice = 0;
 
-  void updateQuantity(bool delta) {
+  void changeQuantity(bool delta) {
     setState(() {
       delta ? quantity++ : quantity--;
       totalPrice = widget.price! * quantity;
@@ -167,6 +169,8 @@ class _GiveDetailState extends State<GiveDetail> {
                             CupertinoDialogAction(
                               child: Text('확인'),
                               onPressed: () {
+                                updateQuantity(
+                                    userLoginId, widget.giveId!, quantity);
                                 Navigator.of(context).pop();
                               },
                             )
@@ -199,7 +203,7 @@ class _GiveDetailState extends State<GiveDetail> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              quantity > 0 ? updateQuantity(false) : null;
+                              quantity > 0 ? changeQuantity(false) : null;
                             },
                             child: SvgPicture.asset(
                               'assets/images/minus_btn.svg',
@@ -218,7 +222,7 @@ class _GiveDetailState extends State<GiveDetail> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              quantity < 100 ? updateQuantity(true) : null;
+                              quantity < 100 ? changeQuantity(true) : null;
                             },
                             child: SvgPicture.asset(
                               'assets/images/plus_btn.svg',
