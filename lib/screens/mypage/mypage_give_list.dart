@@ -36,8 +36,6 @@ class _MypageGiveListState extends State<MypageGiveList> {
       giveIdList = dataService.findGiveIdsByUserId(users, userLoginId);
       usersList = dataService.convertDynamicListToUsersList(users);
     });
-
-    print('giveList length: ${giveIdList.length}');
   }
 
   @override
@@ -65,15 +63,25 @@ class _MypageGiveListState extends State<MypageGiveList> {
                 color: Colors.white,
               ),
               child: giveIdList.isEmpty
-                  ? const Center(
-                      child: Text(
-                        '장바구니에 담은 내역이 없습니다.',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.grey,
+                  ? Column(
+                      children: [
+                        SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: Icon(
+                            Icons.cancel,
+                            color: Color(0xFF44D596),
+                          ),
                         ),
-                      ),
+                        Text(
+                          '담은 재능이 없습니다!',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF222222),
+                          ),
+                        ),
+                      ],
                     )
                   : ListView.builder(
                       itemCount: giveIdList.length,
@@ -101,12 +109,21 @@ class _MypageGiveListState extends State<MypageGiveList> {
                   ),
                 ),
                 onPressed: () {
+                  int totalSumPrice = 0; //장바구니 총 금액
+                  for (int i = 0; i < giveIdList.length; i++) {
+                    int price =
+                        dataService.findPriceByGiveId(gives, giveIdList[i]);
+                    int quantity = dataService.findQuantityByUserIdAndGiveId(
+                        users, userLoginId, giveIdList[i]);
+                    totalSumPrice += price * quantity;
+                  }
+
                   showCupertinoDialog(
                     context: context,
                     builder: (context) {
                       return CupertinoAlertDialog(
                         title: Text('모두 구매하시겠습니까?'),
-                        content: Text('금액 : 원'),
+                        content: Text('금액 : $totalSumPrice원'),
                         actions: [
                           CupertinoDialogAction(
                             isDefaultAction: true,
@@ -151,21 +168,12 @@ class _MypageGiveListState extends State<MypageGiveList> {
     int price = dataService.findPriceByGiveId(gives, giveIdList[index]);
     int quantity = dataService.findQuantityByUserIdAndGiveId(
         users, userLoginId, giveIdList[index]);
+    int totalPrice = quantity * price;
     int giveNameId = dataService.findNameByGiveId(gives, giveIdList[index]);
     String userName = dataService.getNameByUserId(usersList, giveNameId);
     String imgUrl = dataService.findImgUrlByGiveId(gives, giveIdList[index]);
-    print('ssssssssss$userName');
 
-    // 수량 감소 함수
-    void decreaseQuantity() {
-      setState(() {
-        if (quantity > 0) {
-          quantity--; // 값 1 감소
-        }
-      });
-    }
-
-    // 수량 증가 함수
+    // 수량 증감 함수
     void increaseQuantity(bool plus) {
       dataService.increaseQuantity(
           usersList, userLoginId, giveIdList[index], plus);
@@ -175,7 +183,6 @@ class _MypageGiveListState extends State<MypageGiveList> {
       });
     }
 
-    print('${giveIdList[index]}${giveIdList[index].runtimeType}');
     return Container(
       height: 153,
       width: double.infinity,
@@ -281,7 +288,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                           ),
                         ),
                         Text(
-                          '${quantity * price}원',
+                          '$totalPrice원',
                           style: TextStyle(
                             color: Color(0xFF222222),
                             fontSize: 20,

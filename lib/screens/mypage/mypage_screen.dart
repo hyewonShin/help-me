@@ -14,10 +14,6 @@ class MypageScreen extends StatefulWidget {
 
 class _MypageScreenState extends State<MypageScreen> {
   List<Give> giveList = []; // 데이터를 저장할 리스트
-  List<Ask> askList = [];
-  List<Users> usersList = [];
-  List<GiveCartList> giveCartList = []; // 사용자가 담은 재능 목록
-  List<Ask> userAskList = [];
   bool isLoading = true; // 로딩 상태를 관리(true : 로딩중, false : 로딩 완료)
   int userLoginId = 0; // 로그인한 사용자 ID
   int giveCount = 0; //사용자가 담은 재능 개수
