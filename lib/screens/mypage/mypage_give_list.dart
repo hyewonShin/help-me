@@ -4,6 +4,7 @@ import 'models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:help_me/util/load_data_from_document.dart';
 import 'package:help_me/util/delete_usersgive_to_document.dart';
+import 'package:intl/intl.dart';
 
 class MypageGiveList extends StatefulWidget {
   const MypageGiveList({super.key});
@@ -20,6 +21,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
   List<dynamic> gives = [];
   List<dynamic> users = [];
   String userName = '';
+  final comma = NumberFormat("#,###,###원");
 
   @override
   void initState() {
@@ -123,7 +125,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                     builder: (context) {
                       return CupertinoAlertDialog(
                         title: Text('모두 구매하시겠습니까?'),
-                        content: Text('금액 : $totalSumPrice원'),
+                        content: Text('금액 : ${comma.format(totalSumPrice)}'),
                         actions: [
                           CupertinoDialogAction(
                             isDefaultAction: true,
@@ -242,7 +244,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                       ),
                     ),
                     Text(
-                      '1회 $price원', //***
+                      '1회 ${comma.format(price)}', //***
                       style: const TextStyle(
                         color: Color(0xFF17B36F),
                         fontSize: 16,
@@ -288,7 +290,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                           ),
                         ),
                         Text(
-                          '$totalPrice원',
+                          '${comma.format(totalPrice)}',
                           style: TextStyle(
                             color: Color(0xFF222222),
                             fontSize: 20,
