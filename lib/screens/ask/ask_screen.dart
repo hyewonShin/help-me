@@ -36,10 +36,6 @@ class _AskScreenState extends State<AskScreen> {
     try {
       final String response = await rootBundle.loadString(url);
       final data = json.decode(response);
-<<<<<<< HEAD
-      // print(data);
-=======
->>>>>>> 7b4434decf4576aa71072e915ff9da0a8148ee81
       setState(() {
         if (isAskData) {
           _askData = data;
