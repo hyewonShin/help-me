@@ -104,7 +104,7 @@ class _AskScreenState extends State<AskScreen> {
               child: ListView.builder(
                   itemCount: _askData.length,
                   itemBuilder: (context, index) {
-                    final item = _askData[index];
+                    final item = _askData.reversed.toList()[index];
                     final userData = _usersData.firstWhere(
                       (user) => user['user_id'] == item['user_id'],
                       orElse: () => null,
