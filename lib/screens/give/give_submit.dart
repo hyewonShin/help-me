@@ -45,9 +45,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
     final newGive = {
       "ask_id": giveData.length,
       "user_id": 0,
-      "image":
-          "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb4W7bP%2FbtsKVcAKEGd%2FIE8FTHqrB7cxySJs9cWF3k%2Fimg.jpg",
-      // "image": Image.file(File(file!.path)),
+      "image": file!.path,
       "title": _title,
       "desc": _desc,
       "price": int.parse(_price!.replaceAll(",", ""))
