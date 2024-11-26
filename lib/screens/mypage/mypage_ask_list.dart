@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
+import 'package:help_me/util/delete_users_ask_from_document.dart';
 import 'package:help_me/util/load_data_from_document.dart';
 import 'package:help_me/util/save_json_to_file.dart';
 import 'package:intl/intl.dart';
@@ -46,19 +47,12 @@ class _MypageAskListState extends State<MypageAskList> {
     }
   }
 
-  void addStateAndData() async {
-    final newAsk = {
-      "ask_id": 11,
-      "user_id": 0,
-      "title": "바퀴벌레 잡아주세요.",
-      "desc": "제발 잡아주세요.",
-      "price": 20000
-    };
+  void deleteAskData(askId) async {
     setState(() {
-      askData.add({...newAsk, "name": userName});
+      askData.removeWhere((item) => item['ask_id'] == askId);
     });
 
-    writeDataToFile(newAsk, "ask.json");
+    deleteUsersAskData(askId);
   }
 
   @override
@@ -76,11 +70,34 @@ class _MypageAskListState extends State<MypageAskList> {
           decoration: const BoxDecoration(
             color: Colors.white,
           ),
-          child: ListView.builder(
-              itemCount: askData.length, //data 길이만큼 리스트 뷰 생성
-              itemBuilder: (BuildContext context, int index) {
-                return buildContainerList(index);
-              }),
+          child: askData.isEmpty
+              ? Center(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Icon(
+                          Icons.cancel,
+                          color: AppColors.lightGreen,
+                        ),
+                      ),
+                      Text(
+                        '요청한 재능이 없습니다!',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: askData.length, //data 길이만큼 리스트 뷰 생성
+                  itemBuilder: (BuildContext context, int index) {
+                    return buildContainerList(index);
+                  }),
         ),
       ),
     );
@@ -124,7 +141,12 @@ class _MypageAskListState extends State<MypageAskList> {
                       color: AppColors.lightGreen)),
             ],
           ),
-          Icon(Icons.close)
+          GestureDetector(
+              onTap: () {
+                print(ask["ask_id"]);
+                deleteAskData(ask["ask_id"]);
+              },
+              child: Icon(Icons.close))
         ],
       ),
     );
