@@ -82,6 +82,9 @@ class _MypageGiveListState extends State<MypageGiveList> {
                       },
                     ),
             ),
+            SizedBox(
+              height: 48,
+            ),
             Container(
               width: 370,
               height: 42,
@@ -94,7 +97,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF44D596),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 onPressed: () {
@@ -131,7 +134,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                 child: Text(
                   '모두 구매 하기',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
