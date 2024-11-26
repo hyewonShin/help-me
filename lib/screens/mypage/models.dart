@@ -56,7 +56,7 @@ class Ask {
 class Users {
   final int userId;
   final String name;
-  final List<Map<String, dynamic>> giveCart;
+  final List<Map<String, dynamic>> giveCart; // 타입 명시적으로 변경
   final List<Map<String, dynamic>> askCart;
 
   Users({
@@ -68,10 +68,24 @@ class Users {
 
   factory Users.fromJson(Map<String, dynamic> json) {
     return Users(
-        userId: json['user_id'],
-        name: json['name'],
-        giveCart: json['give'],
-        askCart: json['ask']);
+      userId: json['user_id'] ?? -1,
+      name: json['name'] ?? 'Unknown',
+      giveCart: json['give'] != null && json['give'] is List
+          ? List<Map<String, dynamic>>.from(json['give'])
+          : [],
+      askCart: json['ask'] != null && json['ask'] is List
+          ? List<Map<String, dynamic>>.from(json['ask'])
+          : [],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'user_id': userId,
+      'name': name,
+      'give': giveCart,
+      'ask': askCart,
+    };
   }
 }
 
