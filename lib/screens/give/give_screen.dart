@@ -82,6 +82,7 @@ class _GiveScreenState extends State<GiveScreen> {
 
     final trimData = {
       ...newData,
+      'give_id': _giveData.length,
       'seller_name': user['name'],
       'seller_give': user['give'].length,
       'seller_ask': sellerAsk
