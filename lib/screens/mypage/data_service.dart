@@ -4,7 +4,6 @@ import 'package:help_me/util/udate_quantity_to_document.dart';
 import 'models.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart'; // path_provider 임포트
-import 'package:help_me/util/load_data_from_document.dart';
 
 class DataService {
   //json 파일 로드하여 models의 class로 변환
@@ -41,9 +40,6 @@ class DataService {
   /// userid로 사용자 name 가져오는 함수
   String getNameByUserId(List<Users> usersList, int userId) {
     final user = usersList.where((user) => user.userId == userId).toList();
-    print('userId$userId');
-    print(usersList);
-    print(usersList.length);
     return user.isNotEmpty ? user.first.name : 'User not found';
   }
 
@@ -137,21 +133,6 @@ class DataService {
       giveItem['quantity'] -= 1;
     }
     updateQuantity(userLoginId, giveId, giveItem['quantity']);
-
-    //   // 수정된 usersList를 JSON으로 변환
-    //   final updatedJsonString =
-    //       jsonEncode(usersList.map((u) => u.toJson()).toList());
-
-    //   // 파일에 저장
-    //   await FileIO.writeFileAsString(
-    //     data: updatedJsonString,
-    //     path: 'users.json',
-    //   );
-
-    //   print('수량이 성공적으로 업데이트되었습니다.');
-    // } catch (e) {
-    //   print('수량 업데이트 중 오류 발생: $e');
-    // }
   }
 
   List<Users> convertDynamicListToUsersList(List<dynamic> dynamicList) {
@@ -279,7 +260,6 @@ class FileIO {
     // 앱의 로컬 문서 디렉토리 경로를 얻음
     final directory = await getApplicationDocumentsDirectory();
     final filePath = '${directory.path}/$path'; // 경로 형성
-    print("저장할 경로: $filePath"); // 경로 확인 로그 추가
     return File(filePath);
   }
 
