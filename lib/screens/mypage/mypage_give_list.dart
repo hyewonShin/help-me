@@ -6,6 +6,7 @@ import 'package:help_me/util/load_data_from_document.dart';
 import 'package:help_me/util/delete_usersgive_to_document.dart';
 import 'package:intl/intl.dart';
 import 'package:help_me/constant/colors.dart';
+import 'dart:io';
 
 class MypageGiveList extends StatefulWidget {
   const MypageGiveList({super.key});
@@ -108,9 +109,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                             },
                           ),
                   ),
-                  SizedBox(
-                    height: 48,
-                  ),
+                  Spacer(),
                   Container(
                     width: 370,
                     height: 42,
@@ -178,6 +177,7 @@ class _MypageGiveListState extends State<MypageGiveList> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 4)
                 ],
               ),
             ),
@@ -218,8 +218,11 @@ class _MypageGiveListState extends State<MypageGiveList> {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
-            child: Image.network(imgUrl,
-                width: 111, height: 113, fit: BoxFit.cover),
+            child: imgUrl.substring(0, 5) == "https"
+                ? Image.network(imgUrl,
+                    width: 111, height: 113, fit: BoxFit.cover)
+                : Image.file(File(imgUrl),
+                    width: double.infinity, height: 409, fit: BoxFit.cover),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 20),
