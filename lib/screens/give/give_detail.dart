@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:help_me/constant/colors.dart';
+import 'package:help_me/util/save_json_to_file.dart';
 import 'package:intl/intl.dart';
 
 class GiveDetail extends StatefulWidget {
@@ -165,47 +166,53 @@ class _GiveDetailState extends State<GiveDetail> {
             SizedBox(
               width: 20,
             ),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        quantity > 1 ? updateQuantity(false) : null;
-                      },
-                      child: SvgPicture.asset(
-                        'assets/images/minus_btn.svg',
+            widget.price == 0
+                ? Text(
+                    "무료",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  )
+                : Column(
+                    children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              quantity > 0 ? updateQuantity(false) : null;
+                            },
+                            child: SvgPicture.asset(
+                              'assets/images/minus_btn.svg',
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 17.0),
+                            child: Text(
+                              quantity.toString(),
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.lightGreen),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              quantity < 100 ? updateQuantity(true) : null;
+                            },
+                            child: SvgPicture.asset(
+                              'assets/images/plus_btn.svg',
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 17.0),
-                      child: Text(
-                        quantity.toString(),
+                      Text(
+                        comma.format(quantity == 1 ? widget.price : totalPrice),
                         style: TextStyle(
                             fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.lightGreen),
+                            color: AppColors.black,
+                            fontWeight: FontWeight.w700),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        quantity < 100 ? updateQuantity(true) : null;
-                      },
-                      child: SvgPicture.asset(
-                        'assets/images/plus_btn.svg',
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  comma.format(quantity == 1 ? widget.price : totalPrice),
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: AppColors.black,
-                      fontWeight: FontWeight.w700),
-                ),
-              ],
-            ),
+                    ],
+                  ),
           ]),
         ),
         Positioned(
