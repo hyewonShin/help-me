@@ -158,19 +158,49 @@ class _GiveSubmitState extends State<GiveSubmit> {
                     final formKeyState = _formKey.currentState!;
                     if (formKeyState.validate()) {
                       formKeyState.save();
-                      print(
-                          "$_title, $_price, $_desc ${int.parse(_price!.replaceAll(",", "")).runtimeType}");
                     }
                     if (file != null) {
-                      await showCupertinoDialog(
+                      formKeyState.validate()
+                          ? await showCupertinoDialog(
+                              context: context,
+                              builder: (context) => CupertinoAlertDialog(
+                                title: Container(
+                                    width: 100,
+                                    height: 100,
+                                    child: Image.file(File(file!.path))),
+                                content: Text(
+                                    '재능기부 등록하시겠습니까?\n제목: ${_title}\n가격: ${_price}원'),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      "뒤로가기",
+                                      style: TextStyle(color: AppColors.black),
+                                    ),
+                                  ),
+                                  CupertinoDialogAction(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      addData();
+                                    },
+                                    child: const Text(
+                                      "작성하기",
+                                      style:
+                                          TextStyle(color: AppColors.darkGreen),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : null;
+                    } else {
+                      showCupertinoDialog(
                         context: context,
                         builder: (context) => CupertinoAlertDialog(
-                          title: Container(
-                              width: 100,
-                              height: 100,
-                              child: Image.file(File(file!.path))),
-                          content: Text(
-                              '재능기부 등록하시겠습니까?\n제목: ${_title}\n가격: ${_price}원'),
+                          content: Text('사진을 등록해주세요.'),
                           actions: [
                             CupertinoDialogAction(
                               onPressed: () {
@@ -179,17 +209,6 @@ class _GiveSubmitState extends State<GiveSubmit> {
                               child: const Text(
                                 "뒤로가기",
                                 style: TextStyle(color: AppColors.black),
-                              ),
-                            ),
-                            CupertinoDialogAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                addData();
-                              },
-                              child: const Text(
-                                "작성하기",
-                                style: TextStyle(color: AppColors.darkGreen),
                               ),
                             ),
                           ],
