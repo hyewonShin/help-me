@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:help_me/constant/colors.dart';
 import 'package:help_me/screens/give/give_detail.dart';
 import 'package:help_me/screens/give/give_submit.dart';
 import 'package:help_me/util/load_data_from_document.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class GiveScreen extends StatefulWidget {
@@ -24,7 +27,7 @@ class _GiveScreenState extends State<GiveScreen> {
   String? title;
   String? desc;
   int? price;
-
+  XFile? file;
   @override
   void initState() {
     super.initState();
@@ -143,10 +146,16 @@ class _GiveScreenState extends State<GiveScreen> {
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    child: Image.network(item['image'],
-                                        width: 111,
-                                        height: 113,
-                                        fit: BoxFit.cover),
+                                    child:
+                                        item["image"].substring(0, 5) == "https"
+                                            ? Image.network(item['image'],
+                                                width: 111,
+                                                height: 113,
+                                                fit: BoxFit.cover)
+                                            : Image.file(File(item['image']),
+                                                width: 111,
+                                                height: 113,
+                                                fit: BoxFit.cover),
                                   ),
                                   SizedBox(
                                     width: 13,

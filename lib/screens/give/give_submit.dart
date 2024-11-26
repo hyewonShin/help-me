@@ -45,9 +45,7 @@ class _GiveSubmitState extends State<GiveSubmit> {
     final newGive = {
       "ask_id": giveData.length,
       "user_id": 0,
-      "image":
-          "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb4W7bP%2FbtsKVcAKEGd%2FIE8FTHqrB7cxySJs9cWF3k%2Fimg.jpg",
-      // "image": Image.file(File(file!.path)),
+      "image": file!.path,
       "title": _title,
       "desc": _desc,
       "price": int.parse(_price!.replaceAll(",", ""))
@@ -160,43 +158,44 @@ class _GiveSubmitState extends State<GiveSubmit> {
                     final formKeyState = _formKey.currentState!;
                     if (formKeyState.validate()) {
                       formKeyState.save();
-                      print(
-                          "$_title, $_price, $_desc ${int.parse(_price!.replaceAll(",", "")).runtimeType}");
                     }
                     if (file != null) {
-                      await showCupertinoDialog(
-                        context: context,
-                        builder: (context) => CupertinoAlertDialog(
-                          title: Container(
-                              width: 100,
-                              height: 100,
-                              child: Image.file(File(file!.path))),
-                          content: Text(
-                              '재능기부 등록하시겠습니까?\n제목: ${_title}\n가격: ${_price}원'),
-                          actions: [
-                            CupertinoDialogAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                "뒤로가기",
-                                style: TextStyle(color: AppColors.black),
+                      formKeyState.validate()
+                          ? await showCupertinoDialog(
+                              context: context,
+                              builder: (context) => CupertinoAlertDialog(
+                                title: Container(
+                                    width: 100,
+                                    height: 100,
+                                    child: Image.file(File(file!.path))),
+                                content: Text(
+                                    '재능기부 등록하시겠습니까?\n제목: ${_title}\n가격: ${_price}원'),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      "뒤로가기",
+                                      style: TextStyle(color: AppColors.black),
+                                    ),
+                                  ),
+                                  CupertinoDialogAction(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      addData();
+                                    },
+                                    child: const Text(
+                                      "작성하기",
+                                      style:
+                                          TextStyle(color: AppColors.darkGreen),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            CupertinoDialogAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                addData();
-                              },
-                              child: const Text(
-                                "작성하기",
-                                style: TextStyle(color: AppColors.darkGreen),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                            )
+                          : null;
                     }
                   },
                   child: Text(
