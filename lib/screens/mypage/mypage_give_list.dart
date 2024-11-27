@@ -135,37 +135,38 @@ class _MypageGiveListState extends State<MypageGiveList> {
                                   users, userLoginId, giveIdList[i]);
                           totalSumPrice += price * quantity;
                         }
-
-                        showCupertinoDialog(
-                          context: context,
-                          builder: (context) {
-                            return CupertinoAlertDialog(
-                              title: Text('모두 구매하시겠습니까?'),
-                              content:
-                                  Text('금액 : ${comma.format(totalSumPrice)}'),
-                              actions: [
-                                CupertinoDialogAction(
-                                  isDefaultAction: true,
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('취소'),
-                                ),
-                                CupertinoDialogAction(
-                                  isDestructiveAction: true,
-                                  onPressed: () {
-                                    int count = 0;
-                                    Navigator.of(context).popUntil((route) {
-                                      count++;
-                                      return count == 3;
-                                    });
-                                  },
-                                  child: Text('확인'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        if (totalSumPrice != 0) {
+                          showCupertinoDialog(
+                            context: context,
+                            builder: (context) {
+                              return CupertinoAlertDialog(
+                                title: Text('모두 구매하시겠습니까?'),
+                                content:
+                                    Text('금액 : ${comma.format(totalSumPrice)}'),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    isDefaultAction: true,
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('취소'),
+                                  ),
+                                  CupertinoDialogAction(
+                                    isDestructiveAction: true,
+                                    onPressed: () {
+                                      int count = 0;
+                                      Navigator.of(context).popUntil((route) {
+                                        count++;
+                                        return count == 3;
+                                      });
+                                    },
+                                    child: Text('확인'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
                       },
                       child: Text(
                         '모두 구매 하기',
